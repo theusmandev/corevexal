@@ -6,11 +6,18 @@ export default function LoginPage() {
       <div className="mx-auto w-full max-w-sm space-y-6">
         <div className="space-y-2 text-center">
           <h1 className="text-3xl font-bold">Sign In</h1>
-          <p className="text-muted-foreground">Enter your email and password to access your account</p>
+          <p className="text-muted-foreground">
+            Enter your email and password to access your account
+          </p>
         </div>
         <form action={login} className="space-y-4">
           <div className="space-y-2">
-            <label htmlFor="email" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Email</label>
+            <label
+              htmlFor="email"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Email
+            </label>
             <input
               id="email"
               name="email"
@@ -20,7 +27,12 @@ export default function LoginPage() {
             />
           </div>
           <div className="space-y-2">
-            <label htmlFor="password" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Password</label>
+            <label
+              htmlFor="password"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Password
+            </label>
             <input
               id="password"
               name="password"
