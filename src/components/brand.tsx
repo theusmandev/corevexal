@@ -7,7 +7,11 @@ export function Brand({ inverse = false }: { inverse?: boolean }) {
         <span className="absolute inset-0 rotate-45 border-2 border-primary transition-transform group-hover:rotate-90" />
         <span className="size-3 bg-primary" />
       </span>
-      <span className={`font-display text-lg font-bold tracking-normal ${inverse ? "text-inverse" : "text-foreground"}`}>COREVEXAL</span>
+      <span
+        className={`font-display text-lg font-bold tracking-normal ${inverse ? "text-inverse" : "text-foreground"}`}
+      >
+        COREVEXAL
+      </span>
     </Link>
   );
 }
