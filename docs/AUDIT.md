@@ -37,10 +37,20 @@
 5. **Phase 7 (Legal & Footer)**: Finalize disclaimer texts on all relevant pages.
 6. **Phase 8 (Final QA)**: Create `/docs/FINAL_REPORT.md`.
 
-> [!IMPORTANT]
-> **Stack Decision (SEO Evaluation)**
-> The project uses **TanStack Start**, which provides robust Server-Side Rendering (SSR) and server functions. This means production-standard SEO (per-page metadata, Open Graph, dynamic sitemaps, JSON-LD) **CAN** be met on this current stack without prerendering as a SPA.
-> 
-> **Recommendation**: Stay on the current stack (TanStack Start). There is no need to migrate to Next.js App Router, as TanStack Start fulfills the full-stack and SEO requirements natively. 
-> 
-> **Question**: Do you approve staying on TanStack Start and proceeding with Phase 1 and 2?
+## F. RLS Evidence (Step 0)
+| Table | RLS Status | Policy Details |
+|-------|------------|----------------|
+| `profiles` | ON | **Profiles are self managed**: `ALL` for `authenticated` `USING (auth.uid() = id)` |
+| `user_roles` | ON | **Users can read own roles**: `SELECT` for `authenticated` `USING (auth.uid() = user_id)` |
+| `service_categories` | ON | **Published categories are public**: `SELECT` for `anon, authenticated` `USING (status='published' OR has_role('admin'\|'staff'))`<br>**Staff manage categories**: `ALL` for `authenticated` `USING (has_role('admin'\|'staff'))` |
+| `services` | ON | **Published services are public**: `SELECT` for `anon, authenticated` `USING (status='published' OR has_role('admin'\|'staff'))`<br>**Staff manage services**: `ALL` for `authenticated` `USING (has_role('admin'\|'staff'))` |
+| `leads` | ON | **Anyone can submit a lead**: `INSERT` for `anon, authenticated` `WITH CHECK (status = 'New')`<br>**Staff manage leads**: `ALL` for `authenticated` `USING (has_role('admin'\|'staff'))` |
+| `faqs` | ON | **Published FAQs are public**: `SELECT` for `anon, authenticated` `USING (status='published' OR has_role('admin'\|'staff'))`<br>**Staff manage FAQs**: `ALL` for `authenticated` `USING (has_role('admin'\|'staff'))` |
+| `blog_categories` | ON | **Blog categories are public**: `SELECT` for `anon, authenticated` `USING (true)`<br>**Staff manage blog categories**: `ALL` for `authenticated` `USING (has_role('admin'\|'staff'))` |
+| `blog_posts` | ON | **Published posts are public**: `SELECT` for `anon, authenticated` `USING (status='published' OR has_role('admin'\|'staff'))`<br>**Staff manage posts**: `ALL` for `authenticated` `USING (has_role('admin'\|'staff'))` |
+| `countries` | ON | **Active countries are public**: `SELECT` for `anon, authenticated` `USING (active OR has_role('admin'\|'staff'))`<br>**Staff manage countries**: `ALL` for `authenticated` `USING (has_role('admin'\|'staff'))` |
+| `projects` | ON | **Customers read own projects**: `SELECT` for `authenticated` `USING (auth.uid()=customer_id OR has_role('admin'\|'staff'))`<br>**Staff manage projects**: `ALL` for `authenticated` `USING (has_role('admin'\|'staff'))` |
+| `contact_submissions` | ON | **Anyone can submit contact form**: `INSERT` for `anon, authenticated` `WITH CHECK (true)`<br>**Staff manage contact submissions**: `ALL` for `authenticated` `USING (has_role('admin'\|'staff'))` |
+| `site_settings` | ON | **Public settings are readable**: `SELECT` for `anon, authenticated` `USING (is_public OR has_role('admin'))`<br>**Admins manage settings**: `ALL` for `authenticated` `USING (has_role('admin'))` |
+
+*Security Confirmation*: The anon `INSERT` policy for `leads` includes `WITH CHECK (status = 'New')`, verifying that the status cannot be explicitly set to anything else by a public user. Internal fields like `updated_at` are enforced securely by database triggers.

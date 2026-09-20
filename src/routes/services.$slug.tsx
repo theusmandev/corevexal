@@ -1,5 +1,0 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
-import { ServiceDetail } from "@/components/service-detail";
-import { getService } from "@/lib/services";
-export const Route = createFileRoute("/services/$slug")({ loader:({params})=>{const service=getService(params.slug);if(!service) throw notFound();return {service}}, head:({loaderData,params})=>({meta:[{title:loaderData?.service.seoTitle??"Service not found | Corevexal"},{name:"description",content:loaderData?.service.seoDescription??"Corevexal service information."},{property:"og:title",content:loaderData?.service.seoTitle??"Corevexal"},{property:"og:description",content:loaderData?.service.seoDescription??"Corevexal service information."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary_large_image"}],links:[{rel:"canonical",href:`/services/${params.slug}`}]}), component:Page });
-function Page(){const {service}=Route.useLoaderData();return <ServiceDetail service={service}/>}
