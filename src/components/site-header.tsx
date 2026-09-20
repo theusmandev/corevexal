@@ -1,4 +1,7 @@
-import { Link } from "@tanstack/react-router";
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ChevronDown, Menu } from "lucide-react";
 import { Brand } from "./brand";
 import { Button } from "./ui/button";
@@ -15,6 +18,8 @@ const columns = [
 const navLinks = [["Solutions", "/solutions"], ["Resources", "/resources"], ["About", "/about"], ["FAQ", "/faq"], ["Contact", "/contact"]] as const;
 
 export function SiteHeader() {
+  const pathname = usePathname();
+  
   return (
     <header className="sticky top-0 z-40 border-b border-border/80 bg-background/95 backdrop-blur-sm">
       <div className="site-container flex h-20 items-center justify-between gap-8">
@@ -30,16 +35,16 @@ export function SiteHeader() {
                   <div key={column.title}>
                     <p className="mb-3 text-xs font-bold uppercase text-primary">{column.title}</p>
                     <div className="space-y-2.5">
-                      {column.links.map(([label, to]) => <Link key={label} to={to} className="block text-sm text-muted-foreground transition-colors hover:text-foreground">{label}</Link>)}
+                      {column.links.map(([label, href]) => <Link key={label} href={href} className="block text-sm text-muted-foreground transition-colors hover:text-foreground">{label}</Link>)}
                     </div>
                   </div>
                 ))}
               </div>
             </div>
           </div>
-          {navLinks.map(([label, to]) => <Link key={label} to={to} activeProps={{ className: "text-primary" }} className="text-sm font-semibold text-foreground transition-colors hover:text-primary">{label}</Link>)}
+          {navLinks.map(([label, href]) => <Link key={label} href={href} className={`text-sm font-semibold transition-colors hover:text-primary ${pathname.startsWith(href) ? "text-primary" : "text-foreground"}`}>{label}</Link>)}
         </nav>
-        <div className="hidden lg:block"><Button asChild><Link to="/contact">Get Started</Link></Button></div>
+        <div className="hidden lg:block"><Button asChild><Link href="/contact">Get Started</Link></Button></div>
         <Sheet>
           <SheetTrigger asChild><Button variant="ghost" size="icon" className="lg:hidden" aria-label="Open navigation"><Menu /></Button></SheetTrigger>
           <SheetContent className="w-full overflow-y-auto sm:max-w-md">
@@ -48,11 +53,11 @@ export function SiteHeader() {
             <nav className="mt-10" aria-label="Mobile navigation">
               <Accordion type="single" collapsible>
                 <AccordionItem value="services"><AccordionTrigger className="text-base">Services</AccordionTrigger><AccordionContent>
-                  <div className="space-y-6 pt-2">{columns.map((column) => <div key={column.title}><p className="mb-2 text-xs font-bold uppercase text-primary">{column.title}</p>{column.links.map(([label, to]) => <SheetClose asChild key={label}><Link to={to} className="block py-2 text-muted-foreground">{label}</Link></SheetClose>)}</div>)}</div>
+                  <div className="space-y-6 pt-2">{columns.map((column) => <div key={column.title}><p className="mb-2 text-xs font-bold uppercase text-primary">{column.title}</p>{column.links.map(([label, href]) => <SheetClose asChild key={label}><Link href={href} className="block py-2 text-muted-foreground">{label}</Link></SheetClose>)}</div>)}</div>
                 </AccordionContent></AccordionItem>
               </Accordion>
-              <div className="flex flex-col">{navLinks.map(([label, to]) => <SheetClose asChild key={label}><Link to={to} className="border-b border-border py-4 font-semibold">{label}</Link></SheetClose>)}</div>
-              <Button asChild className="mt-8 w-full"><SheetClose asChild><Link to="/contact">Get Started</Link></SheetClose></Button>
+              <div className="flex flex-col">{navLinks.map(([label, href]) => <SheetClose asChild key={label}><Link href={href} className={`border-b border-border py-4 font-semibold ${pathname.startsWith(href) ? "text-primary" : "text-foreground"}`}>{label}</Link></SheetClose>)}</div>
+              <Button asChild className="mt-8 w-full"><SheetClose asChild><Link href="/contact">Get Started</Link></SheetClose></Button>
             </nav>
           </SheetContent>
         </Sheet>

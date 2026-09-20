@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Brand } from "./brand";
 
@@ -15,7 +15,7 @@ export function SiteFooter() {
     <div className="site-container py-16 lg:py-20">
       <div className="grid gap-12 border-b border-inverse/15 pb-14 lg:grid-cols-[1.2fr_2fr]">
         <div><Brand inverse /><p className="mt-6 max-w-sm text-sm leading-7 text-inverse-muted">Business formation, financial infrastructure, payment setup guidance, and digital solutions built around your business.</p><p className="mt-6 text-xs font-bold uppercase text-primary">Where everything starts at the core</p></div>
-        <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-5">{groups.map((group) => <div key={group.title}><h2 className="text-xs font-bold uppercase text-inverse">{group.title}</h2><ul className="mt-4 space-y-3">{group.links.map(([label, to]) => <li key={label}><Link to={to} className="inline-flex items-center gap-1 text-sm text-inverse-muted transition-colors hover:text-primary">{label}<ArrowUpRight className="size-3" /></Link></li>)}</ul></div>)}</div>
+        <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-5">{groups.map((group) => <div key={group.title}><h2 className="text-xs font-bold uppercase text-inverse">{group.title}</h2><ul className="mt-4 space-y-3">{group.links.map(([label, href]) => <li key={label}><Link href={href} className="inline-flex items-center gap-1 text-sm text-inverse-muted transition-colors hover:text-primary">{label}<ArrowUpRight className="size-3" /></Link></li>)}</ul></div>)}</div>
       </div>
       <div className="flex flex-col gap-3 pt-7 text-xs text-inverse-muted sm:flex-row sm:items-center sm:justify-between"><p>© 2026 Corevexal. All rights reserved.</p><p>Business guidance with clear boundaries and transparent communication.</p></div>
     </div>
