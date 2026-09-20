@@ -8,14 +8,21 @@ import { Button } from "./ui/button";
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "./ui/sheet";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./ui/accordion";
 
+import { services, paymentPlatforms, platformContent } from "@/lib/services";
+
+// Helper to format names
+const formatPlatformName = (platform: string) =>
+  platformContent[platform as keyof typeof platformContent].name.replace(" Business", "");
+
 const columns = [
   {
     title: "Business Formation",
     links: [
-      ["UK LTD Formation", "/services/uk-ltd-formation"],
-      ["US LLC Formation", "/services/us-llc-formation"],
+      ...services
+        .filter((s) => s.category === "formation")
+        .map((s) => [s.title, `/services/${s.slug}`]),
       ["Company Setup", "/services/business-formation"],
-    ],
+    ] as [string, string][],
   },
   {
     title: "Business Banking",
@@ -23,17 +30,14 @@ const columns = [
       ["Business Bank Accounts", "/services/business-banking"],
       ["Multi-Currency Accounts", "/services/business-banking"],
       ["Account Setup Guidance", "/services/business-banking"],
-    ],
+    ] as [string, string][],
   },
   {
     title: "Payment Platforms",
-    links: [
-      ["Wise", "/services/payment-platforms/wise"],
-      ["Payoneer", "/services/payment-platforms/payoneer"],
-      ["PayPal", "/services/payment-platforms/paypal"],
-      ["Stripe", "/services/payment-platforms/stripe"],
-      ["TapTap", "/services/payment-platforms/taptap"],
-    ],
+    links: paymentPlatforms.map((p) => [
+      formatPlatformName(p),
+      `/services/payment-platforms/${p}`,
+    ]) as [string, string][],
   },
   {
     title: "Digital & Technology",
@@ -42,7 +46,7 @@ const columns = [
       ["Software", "/services/digital-technology"],
       ["SaaS", "/services/digital-technology"],
       ["Automation", "/services/digital-technology"],
-    ],
+    ] as [string, string][],
   },
 ] as const;
 
