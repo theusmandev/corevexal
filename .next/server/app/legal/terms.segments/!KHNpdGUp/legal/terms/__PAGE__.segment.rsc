@@ -1,0 +1,20 @@
+1:"$Sreact.fragment"
+2:I[97367,["/_next/static/chunks/1las_6j17xa9p.js"],"OutletBoundary"]
+3:"$Sreact.suspense"
+7:I[97367,["/_next/static/chunks/1las_6j17xa9p.js"],"ViewportBoundary"]
+8:I[97367,["/_next/static/chunks/1las_6j17xa9p.js"],"MetadataBoundary"]
+a:I[39756,["/_next/static/chunks/1las_6j17xa9p.js"],"default"]
+b:I[37457,["/_next/static/chunks/1las_6j17xa9p.js"],"default"]
+6:X
+d:X
+d:C
+0:{"buildId":"QvRHKfyLWfU-KsW3PQLiA","data":[{"rsc":["$","$1","c",{"children":[["$","main",null,{"children":[["$","section",null,{"className":"border-b border-border bg-surface","children":["$","div",null,{"className":"site-container grid gap-10 py-20 lg:grid-cols-[1fr_.55fr] lg:py-28","children":[["$","div",null,{"children":[["$","p",null,{"className":"eyebrow","children":"Legal"}],["$","h1",null,{"className":"mt-6 max-w-4xl text-balance font-display text-5xl font-bold leading-[1.02] sm:text-6xl lg:text-7xl","children":"Terms of Use"}],["$","p",null,{"className":"mt-7 max-w-2xl text-lg leading-8 text-muted-foreground","children":"These terms describe the general basis for using the Corevexal website. Service-specific terms should be agreed before an engagement begins."}]]}],"$undefined"]}]}],["$","section",null,{"className":"section","children":["$","div",null,{"className":"site-container max-w-3xl space-y-10","children":[["$","article","Website information",{"children":[["$","h2",null,{"className":"font-display text-2xl font-bold","children":"Website information"}],["$","p",null,{"className":"mt-4 leading-7 text-muted-foreground","children":"Website content is general information and does not constitute legal, tax, accounting, or regulated financial advice."}]]}],["$","article","Third-party services",{"children":[["$","h2",null,{"className":"font-display text-2xl font-bold","children":"Third-party services"}],["$","p",null,{"className":"mt-4 leading-7 text-muted-foreground","children":"Banks, payment platforms, authorities, and other providers maintain their own rules and make independent decisions."}]]}],["$","article","Service engagements",{"children":[["$","h2",null,{"className":"font-display text-2xl font-bold","children":"Service engagements"}],["$","p",null,{"className":"mt-4 leading-7 text-muted-foreground","children":"Scope, fees, responsibilities, and deliverables should be confirmed in a separate written service agreement."}]]}]]}]}]]}],null,["$","$L2",null,{"children":["$","$3",null,{"name":"Next.MetadataOutlet","children":"$@4"}]}]]}],"isPartial":"$@5","staleTime":"$6","varyParams":null},{"rsc":["$","$1","h",{"children":[null,["$","$L7",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","div",null,{"hidden":true,"children":["$","$L8",null,{"children":["$","$3",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Terms of Use | Corevexal"}],["$","meta","1",{"name":"description","content":"Terms governing use of the Corevexal website and consulting information."}],["$","meta","2",{"property":"og:title","content":"Terms of Use | Corevexal"}],["$","meta","3",{"property":"og:description","content":"Corevexal website terms."}],["$","meta","4",{"property":"og:type","content":"website"}],["$","meta","5",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","6",{"name":"twitter:title","content":"Terms of Use | Corevexal"}],["$","meta","7",{"name":"twitter:description","content":"Corevexal website terms."}]]}]}]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"isPartial":"$@9","staleTime":"$6","varyParams":null},{"rsc":["$","$1","c",{"children":[null,["$","$La",null,{"parallelRouterKey":"children","template":["$","$Lb",null,{}]}]]}],"isPartial":"$@c","staleTime":"$6","varyParams":"$d"},{"rsc":["$","$1","c",{"children":[null,["$","$La",null,{"parallelRouterKey":"children","template":["$","$Lb",null,{}]}]]}],"isPartial":"$@e","staleTime":"$6","varyParams":"$d"}],"isUpgradeableISRFallback":false,"a":"$@f","rootVaryParams":null,"needsRuntimeRequest":"$@10"}
+4:null
+10:true
+6:300
+6:C
+f:0
+9:"$undefined"
+c:"$undefined"
+e:"$undefined"
+5:"$undefined"

@@ -1,0 +1,20 @@
+1:"$Sreact.fragment"
+2:I[41680,["/_next/static/chunks/1las_6j17xa9p.js","/_next/static/chunks/4026cvdv_oz06.js","/_next/static/chunks/3pcbwgz43rcvc.js","/_next/static/chunks/3lig6fwochypb.js","/_next/static/chunks/106dqbcn9ma6r.js","/_next/static/chunks/2hv8xtrwif0ak.js"],"ContactForm"]
+3:I[97367,["/_next/static/chunks/1las_6j17xa9p.js"],"OutletBoundary"]
+4:"$Sreact.suspense"
+8:I[97367,["/_next/static/chunks/1las_6j17xa9p.js"],"ViewportBoundary"]
+9:I[97367,["/_next/static/chunks/1las_6j17xa9p.js"],"MetadataBoundary"]
+b:I[39756,["/_next/static/chunks/1las_6j17xa9p.js"],"default"]
+c:I[37457,["/_next/static/chunks/1las_6j17xa9p.js"],"default"]
+7:X
+e:X
+e:C
+0:{"buildId":"QvRHKfyLWfU-KsW3PQLiA","data":[{"rsc":["$","$1","c",{"children":[["$","main",null,{"children":[["$","section",null,{"className":"border-b border-border bg-surface","children":["$","div",null,{"className":"site-container grid gap-10 py-20 lg:grid-cols-[1fr_.55fr] lg:py-28","children":[["$","div",null,{"children":[["$","p",null,{"className":"eyebrow","children":"Get started"}],["$","h1",null,{"className":"mt-6 max-w-4xl text-balance font-display text-5xl font-bold leading-[1.02] sm:text-6xl lg:text-7xl","children":"Start at the Core."}],["$","p",null,{"className":"mt-7 max-w-2xl text-lg leading-8 text-muted-foreground","children":"Tell us what you're building and what you need help setting up."}]]}],"$undefined"]}]}],["$","section",null,{"className":"section","children":["$","div",null,{"className":"site-container grid gap-12 lg:grid-cols-[.55fr_1fr]","children":[["$","aside",null,{"children":[["$","h2",null,{"className":"font-display text-2xl font-bold","children":"A structured first step."}],["$","p",null,{"className":"mt-4 leading-7 text-muted-foreground","children":"Share your current position and intended service. We’ll use this information to understand the most relevant next step."}],["$","p",null,{"className":"mt-8 border-l-2 border-primary pl-5 text-sm leading-6 text-muted-foreground","children":"Submitting a request does not create an advisor-client relationship or guarantee third-party eligibility or approval."}]]}],["$","$L2",null,{}]]}]}]]}],[["$","script","script-0",{"src":"/_next/static/chunks/2hv8xtrwif0ak.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"isPartial":"$@6","staleTime":"$7","varyParams":null},{"rsc":["$","$1","h",{"children":[null,["$","$L8",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","div",null,{"hidden":true,"children":["$","$L9",null,{"children":["$","$4",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Contact Corevexal | Start a Request"}],["$","meta","1",{"name":"description","content":"Tell Corevexal what you are building and what you need help setting up."}],["$","link","2",{"rel":"canonical","href":"/contact"}],["$","meta","3",{"property":"og:title","content":"Start at the Core | Corevexal"}],["$","meta","4",{"property":"og:description","content":"Start a formation, banking, payment, or digital service request."}],["$","meta","5",{"property":"og:type","content":"website"}],["$","meta","6",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","7",{"name":"twitter:title","content":"Start at the Core | Corevexal"}],["$","meta","8",{"name":"twitter:description","content":"Start a formation, banking, payment, or digital service request."}]]}]}]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"isPartial":"$@a","staleTime":"$7","varyParams":null},{"rsc":["$","$1","c",{"children":[null,["$","$Lb",null,{"parallelRouterKey":"children","template":["$","$Lc",null,{}]}]]}],"isPartial":"$@d","staleTime":"$7","varyParams":"$e"}],"isUpgradeableISRFallback":false,"a":"$@f","rootVaryParams":null,"needsRuntimeRequest":"$@10"}
+5:null
+10:true
+7:300
+7:C
+f:0
+a:"$undefined"
+d:"$undefined"
+6:"$undefined"

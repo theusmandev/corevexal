@@ -1,0 +1,20 @@
+1:"$Sreact.fragment"
+2:I[97367,["/_next/static/chunks/1las_6j17xa9p.js"],"OutletBoundary"]
+3:"$Sreact.suspense"
+7:I[97367,["/_next/static/chunks/1las_6j17xa9p.js"],"ViewportBoundary"]
+8:I[97367,["/_next/static/chunks/1las_6j17xa9p.js"],"MetadataBoundary"]
+a:I[39756,["/_next/static/chunks/1las_6j17xa9p.js"],"default"]
+b:I[37457,["/_next/static/chunks/1las_6j17xa9p.js"],"default"]
+6:X
+d:X
+d:C
+0:{"buildId":"QvRHKfyLWfU-KsW3PQLiA","data":[{"rsc":["$","$1","c",{"children":[["$","main",null,{"children":[["$","section",null,{"className":"border-b border-border bg-surface","children":["$","div",null,{"className":"site-container grid gap-10 py-20 lg:grid-cols-[1fr_.55fr] lg:py-28","children":[["$","div",null,{"children":[["$","p",null,{"className":"eyebrow","children":"Legal"}],["$","h1",null,{"className":"mt-6 max-w-4xl text-balance font-display text-5xl font-bold leading-[1.02] sm:text-6xl lg:text-7xl","children":"Cookie Policy"}],["$","p",null,{"className":"mt-7 max-w-2xl text-lg leading-8 text-muted-foreground","children":"This website may use essential cookies required for reliable and secure operation."}]]}],"$undefined"]}]}],["$","section",null,{"className":"section","children":["$","div",null,{"className":"site-container max-w-3xl space-y-10","children":[["$","article","Essential cookies",{"children":[["$","h2",null,{"className":"font-display text-2xl font-bold","children":"Essential cookies"}],["$","p",null,{"className":"mt-4 leading-7 text-muted-foreground","children":"Essential cookies support core site functions and cannot be switched off through the site."}]]}],["$","article","Analytics and marketing",{"children":[["$","h2",null,{"className":"font-display text-2xl font-bold","children":"Analytics and marketing"}],["$","p",null,{"className":"mt-4 leading-7 text-muted-foreground","children":"No non-essential analytics or marketing cookies are described as active in this version of the website. If added later, this policy and consent controls should be updated."}]]}],["$","article","Browser controls",{"children":[["$","h2",null,{"className":"font-display text-2xl font-bold","children":"Browser controls"}],["$","p",null,{"className":"mt-4 leading-7 text-muted-foreground","children":"You can control cookies through your browser settings, though disabling essential cookies may affect site functionality."}]]}]]}]}]]}],null,["$","$L2",null,{"children":["$","$3",null,{"name":"Next.MetadataOutlet","children":"$@4"}]}]]}],"isPartial":"$@5","staleTime":"$6","varyParams":null},{"rsc":["$","$1","h",{"children":[null,["$","$L7",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","div",null,{"hidden":true,"children":["$","$L8",null,{"children":["$","$3",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Cookie Policy | Corevexal"}],["$","meta","1",{"name":"description","content":"Information about cookies used by the Corevexal website."}],["$","meta","2",{"property":"og:title","content":"Cookie Policy | Corevexal"}],["$","meta","3",{"property":"og:description","content":"Corevexal cookie information."}],["$","meta","4",{"property":"og:type","content":"website"}],["$","meta","5",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","6",{"name":"twitter:title","content":"Cookie Policy | Corevexal"}],["$","meta","7",{"name":"twitter:description","content":"Corevexal cookie information."}]]}]}]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"isPartial":"$@9","staleTime":"$6","varyParams":null},{"rsc":["$","$1","c",{"children":[null,["$","$La",null,{"parallelRouterKey":"children","template":["$","$Lb",null,{}]}]]}],"isPartial":"$@c","staleTime":"$6","varyParams":"$d"},{"rsc":["$","$1","c",{"children":[null,["$","$La",null,{"parallelRouterKey":"children","template":["$","$Lb",null,{}]}]]}],"isPartial":"$@e","staleTime":"$6","varyParams":"$d"}],"isUpgradeableISRFallback":false,"a":"$@f","rootVaryParams":null,"needsRuntimeRequest":"$@10"}
+4:null
+10:true
+6:300
+6:C
+f:0
+9:"$undefined"
+c:"$undefined"
+e:"$undefined"
+5:"$undefined"

@@ -1,0 +1,3 @@
+module.exports=[22681,a=>{"use strict";var b=a.i(7997),c=a.i(55255),d=a.i(81764);a.s(["default",0,function({children:a}){return(0,b.jsxs)("div",{className:"flex min-h-screen flex-col bg-background text-foreground",children:[(0,b.jsx)(c.SiteHeader,{}),(0,b.jsx)("main",{className:"flex-1",children:a}),(0,b.jsx)(d.SiteFooter,{})]})}])},65484,function(a){a.n(a.i(22681))}];
+
+//# sourceMappingURL=src_app_%28site%29_layout_tsx_056t8x9._.js.map
