@@ -40,7 +40,7 @@ export default function Home() {
               Business formation • Financial infrastructure • Digital solutions
             </p>
             <h1 className="mt-7 max-w-4xl text-balance font-display text-5xl font-bold leading-[.98] sm:text-6xl lg:text-7xl xl:text-8xl">
-              Build Your Business <span className="text-primary">From the Core.</span>
+              Build Your Business <span className="text-primary-text">From the Core.</span>
             </h1>
             <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground">
               From company formation to business banking, payment infrastructure, and digital
@@ -78,7 +78,7 @@ export default function Home() {
               key={title}
               className="flex items-center gap-4 border-b border-border py-6 sm:px-5 lg:border-b-0 lg:border-r first:pl-0 last:border-r-0"
             >
-              <Icon className="size-5 text-primary" />
+              <Icon className="size-5 text-primary-text" />
               <span className="text-sm font-bold">{title}</span>
             </div>
           ))}
@@ -98,7 +98,7 @@ export default function Home() {
           <div className="mt-12 grid gap-px bg-inverse/15 sm:grid-cols-2 lg:grid-cols-3">
             {formationServices.map(({ title, icon: Icon }) => (
               <div className="bg-deep p-6" key={title}>
-                <Icon className="text-primary" />
+                <Icon className="text-primary-text" />
                 <h3 className="mt-8 font-display text-lg font-bold">{title}</h3>
               </div>
             ))}
@@ -135,7 +135,7 @@ export default function Home() {
             ].map((x, i) => (
               <div className="flex items-center justify-between bg-surface p-6" key={x}>
                 <span className="font-semibold">{x}</span>
-                <span className="font-mono text-xs text-primary">0{i + 1}</span>
+                <span className="font-mono text-xs text-primary-text">0{i + 1}</span>
               </div>
             ))}
           </div>
@@ -163,7 +163,7 @@ export default function Home() {
                 <p className="font-display text-xl font-bold">
                   {platformContent[p].name.replace(" Business", "")}
                 </p>
-                <p className="mt-8 text-xs font-bold uppercase text-muted-foreground group-hover:text-primary">
+                <p className="mt-8 text-xs font-bold uppercase text-muted-foreground group-hover:text-primary-text">
                   Setup guidance <ArrowRight className="ml-1 inline size-3" />
                 </p>
               </Link>
@@ -182,10 +182,10 @@ export default function Home() {
                 className="relative border-l border-inverse/20 px-5 py-6 lg:min-h-48 lg:border-l-0 lg:border-t"
                 key={x}
               >
-                <span className="font-mono text-xs text-primary">0{i + 1}</span>
+                <span className="font-mono text-xs text-primary-text">0{i + 1}</span>
                 <h3 className="mt-10 text-sm font-bold uppercase">{x}</h3>
                 {i < journey.length - 1 && (
-                  <ArrowRight className="absolute -right-3 -top-3 hidden size-5 bg-deep text-primary lg:block" />
+                  <ArrowRight className="absolute -right-3 -top-3 hidden size-5 bg-deep text-primary-text lg:block" />
                 )}
               </div>
             ))}
@@ -207,7 +207,7 @@ export default function Home() {
               "Transparent Communication",
             ].map((x) => (
               <div className="flex min-h-32 items-center gap-4 bg-background p-6" key={x}>
-                <Check className="text-primary" />
+                <Check className="text-primary-text" />
                 <h3 className="font-display font-bold">{x}</h3>
               </div>
             ))}
@@ -263,7 +263,7 @@ export default function Home() {
               "Move Forward With Your Business",
             ].map((x, i) => (
               <li className="min-h-44 bg-background p-6" key={x}>
-                <span className="font-mono text-sm text-primary">0{i + 1}</span>
+                <span className="font-mono text-sm text-primary-text">0{i + 1}</span>
                 <h3 className="mt-12 font-display text-lg font-bold">{x}</h3>
               </li>
             ))}
@@ -324,7 +324,7 @@ export default function Home() {
               Ready to build your business foundation?
             </h2>
           </div>
-          <Button asChild variant="inverse" size="lg">
+          <Button asChild className="border border-primary-foreground bg-transparent text-primary-foreground hover:bg-primary-foreground hover:text-primary-text" size="lg">
             <Link href="/contact">
               Start a Request <ArrowRight className="ml-2 h-4 w-4" />
             </Link>

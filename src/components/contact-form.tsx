@@ -1,7 +1,8 @@
-import { useState, type FormEvent } from "react";
-import { useServerFn } from "@tanstack/react-start";
+"use client";
+
+import { useActionState } from "react";
 import { CheckCircle2, Loader2 } from "lucide-react";
-import { submitLead } from "@/lib/leads.functions";
+import { submitContact } from "@/app/actions/contact";
 import { Button } from "./ui/button";
 
 const statuses = [
@@ -22,52 +23,27 @@ const options = [
   "Digital Services",
   "Other",
 ];
+
 export function ContactForm() {
-  const send = useServerFn(submitLead);
-  const [state, setState] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [error, setError] = useState("");
-  async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setState("loading");
-    setError("");
-    const form = new FormData(event.currentTarget);
-    try {
-      await send({
-        data: {
-          fullName: String(form.get("fullName") ?? ""),
-          email: String(form.get("email") ?? ""),
-          phone: String(form.get("phone") ?? ""),
-          country: String(form.get("country") ?? ""),
-          companyStatus: String(form.get("companyStatus") ?? ""),
-          companyName: String(form.get("companyName") ?? ""),
-          serviceRequested: String(form.get("serviceRequested") ?? ""),
-          businessType: String(form.get("businessType") ?? ""),
-          message: String(form.get("message") ?? ""),
-          website: String(form.get("website") ?? ""),
-        },
-      });
-      setState("success");
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Please try again.");
-      setState("error");
-    }
-  }
-  if (state === "success")
+  const [state, formAction, isPending] = useActionState(submitContact, { success: false });
+
+  if (state.success)
     return (
       <div className="border border-border bg-surface p-8" role="status">
-        <CheckCircle2 className="size-10 text-primary" />
+        <CheckCircle2 className="size-10 text-primary-text" />
         <h2 className="mt-6 font-display text-2xl font-bold">Request received.</h2>
         <p className="mt-3 leading-7 text-muted-foreground">
           Thank you. Corevexal will review your requirements and follow up using the details
           provided.
         </p>
-        <Button className="mt-6" variant="outline" onClick={() => setState("idle")}>
+        <Button className="mt-6" variant="outline" onClick={() => window.location.reload()}>
           Submit another request
         </Button>
       </div>
     );
+
   return (
-    <form onSubmit={submit} className="grid gap-5" aria-label="Service request form">
+    <form action={formAction} className="grid gap-5" aria-label="Service request form">
       <div className="hidden" aria-hidden="true">
         <label>
           Website
@@ -75,15 +51,16 @@ export function ContactForm() {
         </label>
       </div>
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field label="Full Name" name="fullName" required />
-        <Field label="Email" name="email" type="email" required />
-        <Field label="Phone" name="phone" type="tel" />
-        <Field label="Country" name="country" required />
-        <Field label="Company Name" name="companyName" />
-        <Field label="Business Type" name="businessType" required />
+        <Field label="Full Name" name="fullName" required error={state.fieldErrors?.["fullName"]} />
+        <Field label="Email" name="email" type="email" required error={state.fieldErrors?.["email"]} />
+        <Field label="Phone" name="phone" type="tel" error={state.fieldErrors?.["phone"]} />
+        <Field label="Country" name="country" required error={state.fieldErrors?.["country"]} />
+        <Field label="Company Name" name="companyName" error={state.fieldErrors?.["companyName"]} />
+        <Field label="Business Type" name="businessType" required error={state.fieldErrors?.["businessType"]} />
       </div>
-      <SelectField label="Company Status" name="companyStatus" options={statuses} />
-      <SelectField label="Service Needed" name="serviceRequested" options={options} />
+      <SelectField label="Company Status" name="companyStatus" options={statuses} error={state.fieldErrors?.["companyStatus"]} />
+      <SelectField label="Service Needed" name="serviceRequested" options={options} error={state.fieldErrors?.["serviceRequested"]} />
+      
       <label className="grid gap-2 text-sm font-semibold">
         Message
         <textarea
@@ -91,41 +68,48 @@ export function ContactForm() {
           required
           minLength={10}
           rows={6}
-          className="border border-input bg-background px-4 py-3 font-normal focus:border-primary"
+          className={`border bg-background px-4 py-3 font-normal focus:border-primary ${state.fieldErrors?.["message"] ? "border-destructive" : "border-input"}`}
           placeholder="Tell us what you are building and where you need guidance."
         />
+        {state.fieldErrors?.["message"] && <span className="text-xs text-destructive">{state.fieldErrors["message"][0]}</span>}
       </label>
-      {state === "error" && (
-        <p role="alert" className="text-sm text-destructive">
-          {error}
+      
+      {state.error && (
+        <p role="alert" className="text-sm text-destructive font-medium">
+          {state.error}
         </p>
       )}
-      <Button disabled={state === "loading"} size="lg" className="w-full sm:w-fit">
-        {state === "loading" ? (
+      
+      <Button disabled={isPending} size="lg" className="w-full sm:w-fit">
+        {isPending ? (
           <>
-            <Loader2 className="animate-spin" />
+            <Loader2 className="mr-2 animate-spin size-4" />
             Submitting
           </>
         ) : (
           "Submit Request"
         )}
       </Button>
+      
       <p className="text-xs leading-5 text-muted-foreground">
         Protected by a hidden spam trap. By submitting, you agree to our privacy policy.
       </p>
     </form>
   );
 }
+
 function Field({
   label,
   name,
   type = "text",
   required = false,
+  error,
 }: {
   label: string;
   name: string;
   type?: string;
   required?: boolean;
+  error?: string[] | undefined;
 }) {
   return (
     <label className="grid gap-2 text-sm font-semibold">
@@ -134,12 +118,24 @@ function Field({
         name={name}
         type={type}
         required={required}
-        className="h-12 border border-input bg-background px-4 font-normal focus:border-primary"
+        className={`h-12 border bg-background px-4 font-normal focus:border-primary ${error ? "border-destructive" : "border-input"}`}
       />
+      {error && <span className="text-xs text-destructive">{error[0]}</span>}
     </label>
   );
 }
-function SelectField({ label, name, options }: { label: string; name: string; options: string[] }) {
+
+function SelectField({ 
+  label, 
+  name, 
+  options, 
+  error 
+}: { 
+  label: string; 
+  name: string; 
+  options: string[]; 
+  error?: string[] | undefined;
+}) {
   return (
     <label className="grid gap-2 text-sm font-semibold">
       {label}
@@ -147,7 +143,7 @@ function SelectField({ label, name, options }: { label: string; name: string; op
         name={name}
         required
         defaultValue=""
-        className="h-12 border border-input bg-background px-4 font-normal focus:border-primary"
+        className={`h-12 border bg-background px-4 font-normal focus:border-primary ${error ? "border-destructive" : "border-input"}`}
       >
         <option value="" disabled>
           Select an option
@@ -156,6 +152,7 @@ function SelectField({ label, name, options }: { label: string; name: string; op
           <option key={x}>{x}</option>
         ))}
       </select>
+      {error && <span className="text-xs text-destructive">{error[0]}</span>}
     </label>
   );
 }

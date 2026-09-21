@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "./ui/button";
 
@@ -17,7 +17,7 @@ export function CtaBand() {
           </p>
         </div>
         <Button asChild size="lg">
-          <Link to="/contact">
+          <Link href="/contact">
             Start a Request <ArrowRight />
           </Link>
         </Button>

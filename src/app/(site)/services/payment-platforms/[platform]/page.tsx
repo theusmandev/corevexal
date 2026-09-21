@@ -1,0 +1,140 @@
+import { ArrowRight, Check } from "lucide-react";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { PageHero } from "@/components/page-hero";
+import { CtaBand } from "@/components/cta-band";
+import {
+  platformContent,
+  isPaymentPlatform,
+  sharedDisclaimer,
+  paymentPlatforms,
+} from "@/lib/services";
+import { Button } from "@/components/ui/button";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import type { Metadata } from "next";
+
+type Props = {
+  params: Promise<{ platform: string }>;
+};
+
+export async function generateStaticParams() {
+  return paymentPlatforms.map((platform) => ({ platform }));
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { platform } = await params;
+  if (!isPaymentPlatform(platform)) return { title: "Not Found" };
+  const data = platformContent[platform];
+
+  return {
+    title: `${data.name} Setup Guidance | Corevexal`,
+    description: `Business setup, documentation, and application guidance for ${data.name}.`,
+    openGraph: {
+      title: `${data.name} Setup Guidance | Corevexal`,
+      description: "Independent business setup and documentation guidance.",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+    },
+    alternates: {
+      canonical: `/services/payment-platforms/${platform}`,
+    },
+  };
+}
+
+export default async function Page({ params }: Props) {
+  const { platform } = await params;
+  if (!isPaymentPlatform(platform)) notFound();
+  
+  const data = platformContent[platform];
+
+  return (
+    <main>
+      <PageHero
+        eyebrow="Payment platform guidance"
+        title={`${data.name} Setup Guidance`}
+        description={data.suitableFor}
+      >
+        <Button asChild size="lg">
+          <Link href="/contact">
+            Start a Request <ArrowRight />
+          </Link>
+        </Button>
+      </PageHero>
+      <section className="section">
+        <div className="site-container grid gap-14 lg:grid-cols-2">
+          <div>
+            <h2 className="section-title">Business setup considerations</h2>
+            <p className="mt-5 leading-7 text-muted-foreground">
+              We help you organize the business context and information commonly
+              considered during a platform application.
+            </p>
+          </div>
+          <ul className="grid gap-px bg-border">
+            {data.considerations.map((x) => (
+              <li className="flex gap-4 bg-background p-6" key={x}>
+                <Check className="text-primary-text" />
+                {x}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+      <section className="section bg-surface">
+        <div className="site-container grid gap-8 lg:grid-cols-3">
+          {[
+            [
+              "Required information",
+              "Company, ownership, operational, and identity information may be requested.",
+            ],
+            [
+              "Application process",
+              "Requirements can change. Review current provider instructions before submission.",
+            ],
+            [
+              "Verification",
+              "Providers independently review eligibility, identity, business activity, and risk.",
+            ],
+          ].map(([a, b]) => (
+            <article className="border-t-2 border-primary bg-background p-7" key={a}>
+              <h2 className="font-display text-xl font-bold">{a}</h2>
+              <p className="mt-4 text-sm leading-6 text-muted-foreground">{b}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+      <section className="section">
+        <div className="site-container max-w-4xl">
+          <h2 className="section-title">Common questions</h2>
+          <Accordion type="single" collapsible className="mt-8">
+            <AccordionItem value="approval">
+              <AccordionTrigger>Is approval guaranteed?</AccordionTrigger>
+              <AccordionContent className="leading-7 text-muted-foreground">
+                No. {sharedDisclaimer}
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="issues">
+              <AccordionTrigger>What are common application issues?</AccordionTrigger>
+              <AccordionContent className="leading-7 text-muted-foreground">
+                Incomplete or inconsistent documents, unclear business activity,
+                unsupported jurisdictions, and verification delays can affect applications.
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+          <p className="mt-10 border-l-2 border-primary pl-5 text-sm text-muted-foreground">
+            Platform rules and availability change. Always check the provider’s current
+            terms. Corevexal is an independent consultancy and does not imply official
+            affiliation.
+          </p>
+        </div>
+      </section>
+      <CtaBand />
+    </main>
+  );
+}

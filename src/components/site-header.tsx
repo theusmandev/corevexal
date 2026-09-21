@@ -68,7 +68,7 @@ export function SiteHeader() {
         <nav className="hidden items-center gap-7 lg:flex" aria-label="Primary navigation">
           <div className="group relative">
             <button
-              className="flex h-20 items-center gap-1.5 text-sm font-semibold text-foreground transition-colors hover:text-primary"
+              className="flex h-20 items-center gap-1.5 text-sm font-semibold text-foreground transition-colors hover:text-primary-text"
               type="button"
             >
               Services{" "}
@@ -78,7 +78,7 @@ export function SiteHeader() {
               <div className="grid grid-cols-4 gap-6">
                 {columns.map((column) => (
                   <div key={column.title}>
-                    <p className="mb-3 text-xs font-bold uppercase text-primary">{column.title}</p>
+                    <p className="mb-3 text-xs font-bold uppercase text-primary-text">{column.title}</p>
                     <div className="space-y-2.5">
                       {column.links.map(([label, href]) => (
                         <Link
@@ -99,7 +99,7 @@ export function SiteHeader() {
             <Link
               key={label}
               href={href}
-              className={`text-sm font-semibold transition-colors hover:text-primary ${pathname.startsWith(href) ? "text-primary" : "text-foreground"}`}
+              className={`text-sm font-semibold transition-colors hover:text-primary-text ${pathname.startsWith(href) ? "text-primary-text" : "text-foreground"}`}
             >
               {label}
             </Link>
@@ -127,7 +127,7 @@ export function SiteHeader() {
                     <div className="space-y-6 pt-2">
                       {columns.map((column) => (
                         <div key={column.title}>
-                          <p className="mb-2 text-xs font-bold uppercase text-primary">
+                          <p className="mb-2 text-xs font-bold uppercase text-primary-text">
                             {column.title}
                           </p>
                           {column.links.map(([label, href]) => (
@@ -148,7 +148,7 @@ export function SiteHeader() {
                   <SheetClose asChild key={label}>
                     <Link
                       href={href}
-                      className={`border-b border-border py-4 font-semibold ${pathname.startsWith(href) ? "text-primary" : "text-foreground"}`}
+                      className={`border-b border-border py-4 font-semibold ${pathname.startsWith(href) ? "text-primary-text" : "text-foreground"}`}
                     >
                       {label}
                     </Link>

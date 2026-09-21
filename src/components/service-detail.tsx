@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import Link from "next/link";
 import { ArrowRight, Check, FileText, Route as RouteIcon, Users } from "lucide-react";
 import type { Service } from "@/lib/services";
 import { sharedDisclaimer } from "@/lib/services";
@@ -22,17 +22,17 @@ export function ServiceDetail({ service }: { service: Service }) {
             </p>
             <div className="mt-9 flex flex-wrap gap-3">
               <Button asChild size="lg">
-                <Link to="/contact">
+                <Link href="/contact">
                   Get Started <ArrowRight />
                 </Link>
               </Button>
               <Button asChild variant="inverse" size="lg">
-                <Link to="/services">Explore Services</Link>
+                <Link href="/services">Explore Services</Link>
               </Button>
             </div>
           </div>
           <div className="core-diagram">
-            <Icon className="size-16 text-primary" />
+            <Icon className="size-16 text-primary-text" />
             <span />
             <p>{service.category}</p>
             <span />
@@ -52,7 +52,7 @@ export function ServiceDetail({ service }: { service: Service }) {
           <div className="grid gap-px bg-border sm:grid-cols-2">
             {service.features.map((feature) => (
               <div key={feature} className="flex min-h-28 items-start gap-4 bg-background p-6">
-                <Check className="mt-0.5 size-5 text-primary" />
+                <Check className="mt-0.5 size-5 text-primary-text" />
                 <span className="font-semibold">{feature}</span>
               </div>
             ))}
@@ -63,7 +63,7 @@ export function ServiceDetail({ service }: { service: Service }) {
         <div className="site-container grid gap-12 lg:grid-cols-2">
           <div>
             <div className="flex items-center gap-3">
-              <FileText className="text-primary" />
+              <FileText className="text-primary-text" />
               <h2 className="font-display text-3xl font-bold">What to prepare</h2>
             </div>
             <ul className="mt-7 divide-y divide-border border-y border-border">
@@ -76,13 +76,13 @@ export function ServiceDetail({ service }: { service: Service }) {
           </div>
           <div>
             <div className="flex items-center gap-3">
-              <RouteIcon className="text-primary" />
+              <RouteIcon className="text-primary-text" />
               <h2 className="font-display text-3xl font-bold">The process</h2>
             </div>
             <ol className="mt-7 space-y-3">
               {service.process.map((item, index) => (
                 <li key={item} className="flex gap-5 border border-border bg-background p-5">
-                  <span className="font-mono text-sm font-bold text-primary">
+                  <span className="font-mono text-sm font-bold text-primary-text">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <span className="font-medium">{item}</span>
@@ -95,7 +95,7 @@ export function ServiceDetail({ service }: { service: Service }) {
       <section className="section">
         <div className="site-container max-w-4xl">
           <div className="flex items-center gap-3">
-            <Users className="text-primary" />
+            <Users className="text-primary-text" />
             <h2 className="font-display text-3xl font-bold">Frequently asked questions</h2>
           </div>
           <Accordion type="single" collapsible className="mt-8">

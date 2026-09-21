@@ -63,7 +63,7 @@ export function SiteFooter() {
               Business formation, financial infrastructure, payment setup guidance, and digital
               solutions built around your business.
             </p>
-            <p className="mt-6 text-xs font-bold uppercase text-primary">
+            <p className="mt-6 text-xs font-bold uppercase text-primary-text">
               Where everything starts at the core
             </p>
           </div>
@@ -76,7 +76,7 @@ export function SiteFooter() {
                     <li key={label}>
                       <Link
                         href={href}
-                        className="inline-flex items-center gap-1 text-sm text-inverse-muted transition-colors hover:text-primary"
+                        className="inline-flex items-center gap-1 text-sm text-inverse-muted transition-colors hover:text-primary-text"
                       >
                         {label}
                         <ArrowUpRight className="size-3" />
