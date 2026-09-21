@@ -11,3 +11,5 @@ The following items are still open and must be completed:
 7. **URL Parity**: Build an old vs. new URL parity table.
 8. **Login Page Polish**: General layout and styling polish for the login UI.
 9. **Hero Redesign**: Implement a flat concentric diagram (5 layers, no glow, no glassmorphism) per `SPEC.md`.
+
+> **Note**: Migration `20260921120000_leads_hardening.sql` was applied manually in the Supabase SQL Editor. A future `supabase db push` may need `supabase migration repair` first.
