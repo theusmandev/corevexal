@@ -12,12 +12,12 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   }
 
   // Enforce admin role
-  const { data: hasRole } = await supabase.rpc("has_role", {
+  const { data: hasRole, error } = await supabase.rpc("has_role", {
     _user_id: user.id,
     _role: "admin",
   });
 
-  if (!hasRole) {
+  if (error || !hasRole) {
     // If authenticated but not admin, deny access
     redirect("/login?error=unauthorized");
   }

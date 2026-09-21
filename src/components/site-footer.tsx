@@ -72,17 +72,22 @@ export function SiteFooter() {
               <div key={group.title}>
                 <h2 className="text-xs font-bold uppercase text-inverse">{group.title}</h2>
                 <ul className="mt-4 space-y-3">
-                  {group.links.map(([label, href]) => (
-                    <li key={label}>
-                      <Link
-                        href={href}
-                        className="inline-flex items-center gap-1 text-sm text-inverse-muted transition-colors hover:text-primary-text"
-                      >
-                        {label}
-                        <ArrowUpRight className="size-3" />
-                      </Link>
-                    </li>
-                  ))}
+                  {group.links.map(([label, href]) => {
+                    const isExternal = href.startsWith("http");
+                    return (
+                      <li key={label}>
+                        <Link
+                          href={href}
+                          target={isExternal ? "_blank" : undefined}
+                          rel={isExternal ? "noopener noreferrer" : undefined}
+                          className="inline-flex items-center gap-1 text-sm text-inverse-muted transition-colors hover:text-primary-text"
+                        >
+                          {label}
+                          {isExternal && <ArrowUpRight className="size-3" />}
+                        </Link>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             ))}

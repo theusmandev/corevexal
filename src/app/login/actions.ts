@@ -11,13 +11,23 @@ export async function login(formData: FormData) {
     password: formData.get("password") as string,
   };
 
-  const { error } = await supabase.auth.signInWithPassword(data);
+  const { data: authData, error } = await supabase.auth.signInWithPassword(data);
 
   if (error) {
-    // In a real app we'd pass this to UI, but this is minimal
     throw new Error(error.message);
   }
 
-  // Redirect on successful sign in
-  redirect("/portal");
+  // Check if user has admin role
+  let target = "/portal";
+  if (authData?.user) {
+    const { data: hasRole } = await supabase.rpc("has_role", {
+      _user_id: authData.user.id,
+      _role: "admin",
+    });
+    if (hasRole) {
+      target = "/admin";
+    }
+  }
+
+  redirect(target);
 }
