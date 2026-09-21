@@ -4,12 +4,13 @@ import { z } from "zod";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import type { Database } from "@/integrations/supabase/types";
+import { COUNTRY_CODES } from "@/lib/countries";
 
 const leadSchema = z.object({
  fullName: z.string().trim().min(2, "Name must be at least 2 characters").max(100, "Name is too long"),
  email: z.string().trim().email("Invalid email address").max(180, "Email is too long"),
  phone: z.string().trim().max(40, "Phone is too long").optional(),
- country: z.string().trim().min(2, "Country is required").max(100),
+ country: z.enum(COUNTRY_CODES, { errorMap: () => ({ message: "Invalid country selected" }) }),
  companyStatus: z.string().trim().min(2, "Status is required").max(100),
  companyName: z.string().trim().max(160, "Company name is too long").optional(),
  serviceRequested: z.string().trim().min(2, "Service is required").max(100),
