@@ -1,3 +1,0 @@
-{
-  "/(site)/services/payment-platforms/[platform]/page": "app/(site)/services/payment-platforms/[platform]/page.js"
-}
