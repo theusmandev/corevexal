@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/integrations/supabase/server";
 import { AdminNav } from "@/components/admin-nav";
 import { signOut } from "@/app/actions/auth";
+import { Brand } from "@/components/brand";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -28,7 +29,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <header className="border-b border-border bg-surface">
         <div className="site-container flex h-14 items-center justify-between">
           <div className="flex items-center gap-6">
-            <p className="font-bold hidden sm:block text-primary">Corevexal</p>
+            <Brand />
             <AdminNav />
           </div>
           <form action={signOut}>

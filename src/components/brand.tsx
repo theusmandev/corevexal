@@ -1,17 +1,12 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export function Brand({ inverse = false }: { inverse?: boolean }) {
+  const src = inverse ? "/brand/logo-horizontal-reversed.svg" : "/brand/logo-horizontal.svg";
+
   return (
-    <Link href="/" className="group inline-flex items-center gap-3" aria-label="Corevexal home">
-      <span className="relative grid size-9 place-items-center" aria-hidden="true">
-        <span className="absolute inset-0 rotate-45 border-2 border-primary transition-transform group-hover:rotate-90" />
-        <span className="size-3 bg-primary" />
-      </span>
-      <span
-        className={`font-display text-lg font-bold tracking-normal ${inverse ? "text-inverse" : "text-foreground"}`}
-      >
-        COREVEXAL
-      </span>
+    <Link href="/" className="group inline-flex items-center" aria-label="Corevexal home">
+      <Image src={src} alt="Corevexal" width={180} height={40} className="h-8 w-auto" priority />
     </Link>
   );
 }
