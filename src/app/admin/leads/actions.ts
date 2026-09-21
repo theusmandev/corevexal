@@ -39,7 +39,7 @@ export async function updateLeadStatus(formData: FormData) {
     // Update with .select() to verify RLS success. Must return exactly 1 row.
     const { data, error } = await supabase
       .from("leads")
-      .update({ status: status as any })
+      .update({ status: status as never })
       .eq("id", id)
       .select("id")
       .single();

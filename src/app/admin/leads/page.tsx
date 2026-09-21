@@ -25,11 +25,11 @@ export default async function LeadsPage({
   const statusFilters = statusParam
     .split(",")
     .map((s) => s.trim())
-    .filter((s) => LEAD_STATUSES.includes(s as any)) as (typeof LEAD_STATUSES)[number][];
+    .filter((s) => (LEAD_STATUSES as readonly string[]).includes(s)) as (typeof LEAD_STATUSES)[number][];
 
   // Search filter - sanitize tightly
-  let rawSearch = typeof resolvedParams["search"] === "string" ? resolvedParams["search"] : "";
-  let safeSearch = sanitizeSearchTerm(rawSearch);
+  const rawSearch = typeof resolvedParams["search"] === "string" ? resolvedParams["search"] : "";
+  const safeSearch = sanitizeSearchTerm(rawSearch);
 
   const supabase = await createClient();
 
