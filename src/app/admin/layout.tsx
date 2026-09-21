@@ -20,8 +20,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
  });
 
  if (error || !hasRole) {
- // If authenticated but not admin, deny access
- redirect("/login?error=unauthorized");
+ redirect("/portal");
  }
 
  return (

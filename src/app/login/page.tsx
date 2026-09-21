@@ -1,7 +1,17 @@
 import { login } from "./actions";
+import { createClient } from "@/integrations/supabase/server";
+import { redirect } from "next/navigation";
 
-export default function LoginPage() {
- return (
+export default async function LoginPage() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  if (user) {
+    const { data: hasRole } = await supabase.rpc("has_role", { _user_id: user.id, _role: "admin" });
+    redirect(hasRole ? "/admin" : "/portal");
+  }
+
+  return (
  <div className="flex min-h-screen items-center justify-center p-4">
  <div className="mx-auto w-full max-w-sm space-y-6">
  <div className="space-y-2 text-center">
