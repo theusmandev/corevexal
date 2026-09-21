@@ -1,7 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-export default async function proxy(request: NextRequest) {
+export default async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
   });
@@ -32,16 +32,35 @@ export default async function proxy(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Protect /admin and /portal routes
-  const protectedRoutes = ["/admin", "/portal"];
-  const isProtectedRoute = protectedRoutes.some((route) =>
-    request.nextUrl.pathname.startsWith(route),
-  );
+  const path = request.nextUrl.pathname;
 
-  if (isProtectedRoute && !user) {
+  // Protect /admin and /portal routes
+  if ((path.startsWith("/admin") || path.startsWith("/portal")) && !user) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
+  }
+
+  if (user) {
+    // Redirect /login -> home
+    if (path === "/login") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/";
+      return NextResponse.redirect(url);
+    }
+
+    // Redirect non-admins trying to access /admin -> /portal
+    if (path.startsWith("/admin")) {
+      const { data: isAdmin } = await supabase.rpc("has_role", {
+        _user_id: user.id,
+        _role: "admin",
+      });
+      if (!isAdmin) {
+        const url = request.nextUrl.clone();
+        url.pathname = "/portal";
+        return NextResponse.redirect(url);
+      }
+    }
   }
 
   return supabaseResponse;
