@@ -21,8 +21,7 @@ export default async function AdminDashboardPage() {
  { count: inProgressCount, error: inProgressError },
  { count: completedCount, error: completedError },
  { count: recentCount, error: recentError },
- { data: latestLeads, error: latestError },
- { data: statusCountsData, error: statusError }
+ { data: latestLeads, error: latestError }
  ] = await Promise.all([
  supabase.from("leads").select("*", { count: "exact", head: true }),
  supabase.from("leads").select("*", { count: "exact", head: true }).eq("status", "New"),
@@ -43,7 +42,7 @@ export default async function AdminDashboardPage() {
  const statusResults = await Promise.all(statusPromises);
 
  // Check for errors
- const hasError = [totalError, newError, inProgressError, completedError, recentError, latestError, statusError, ...statusResults.map(r => r.error)].some(e => e !== null);
+ const hasError = [totalError, newError, inProgressError, completedError, recentError, latestError, ...statusResults.map(r => r.error)].some(e => e !== null);
  if (hasError) {
  console.error("Dashboard query failed");
  }
@@ -54,12 +53,12 @@ export default async function AdminDashboardPage() {
  
  if (!hasError) {
  LEAD_STATUSES.forEach((s, i) => {
- const cnt = statusResults[i].count || 0;
+ const cnt = statusResults[i]?.count ?? 0;
  statusCounts[s] = cnt;
  accountedTotal += cnt;
  });
  }
- const otherCount = (totalCount || 0) - accountedTotal;
+ const otherCount = (totalCount ?? 0) - accountedTotal;
  if (otherCount > 0) {
  statusCounts["Other"] = otherCount;
  }

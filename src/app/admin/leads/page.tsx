@@ -24,7 +24,7 @@ export default async function LeadsPage({
  const statusFilters = statusParam
  .split(",")
  .map(s => s.trim())
- .filter(s => LEAD_STATUSES.includes(s as any));
+ .filter(s => LEAD_STATUSES.includes(s as any)) as (typeof LEAD_STATUSES[number])[];
 
  // Search filter - sanitize tightly
  let rawSearch = typeof resolvedParams['search'] === "string" ? resolvedParams['search'] : "";
@@ -93,7 +93,7 @@ export default async function LeadsPage({
  <select 
  name="status" 
  id="status"
- defaultValue={statusFilter || ""}
+ defaultValue={statusParam}
  className="h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
  >
  <option value="">All</option>
@@ -163,7 +163,7 @@ export default async function LeadsPage({
  <div className="flex gap-2">
  {page > 1 && (
  <Link
- href={`/admin/leads?page=${page - 1}${statusFilter ? `&status=${encodeURIComponent(statusFilter)}` : ""}${safeSearch ? `&search=${encodeURIComponent(safeSearch)}` : ""}`}
+ href={`/admin/leads?page=${page - 1}${statusParam ? `&status=${encodeURIComponent(statusParam)}` : ""}${safeSearch ? `&search=${encodeURIComponent(safeSearch)}` : ""}`}
  className="inline-flex h-9 items-center justify-center rounded-md border border-border bg-background px-3 text-sm font-medium hover:bg-surface focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
  >
  Previous
@@ -171,7 +171,7 @@ export default async function LeadsPage({
  )}
  {page < totalPages && (
  <Link
- href={`/admin/leads?page=${page + 1}${statusFilter ? `&status=${encodeURIComponent(statusFilter)}` : ""}${safeSearch ? `&search=${encodeURIComponent(safeSearch)}` : ""}`}
+ href={`/admin/leads?page=${page + 1}${statusParam ? `&status=${encodeURIComponent(statusParam)}` : ""}${safeSearch ? `&search=${encodeURIComponent(safeSearch)}` : ""}`}
  className="inline-flex h-9 items-center justify-center rounded-md border border-border bg-background px-3 text-sm font-medium hover:bg-surface focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
  >
  Next
