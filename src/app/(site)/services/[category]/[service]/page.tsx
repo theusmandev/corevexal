@@ -3,6 +3,12 @@ import { getService } from "@/lib/services";
 import { ServiceDetail } from "@/components/service-detail";
 import type { Metadata } from "next";
 
+export const dynamicParams = false;
+
+export async function generateStaticParams() {
+  return [];
+}
+
 type Props = {
  params: Promise<{ category: string; service: string }>;
 };

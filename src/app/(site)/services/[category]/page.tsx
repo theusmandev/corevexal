@@ -3,9 +3,18 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageHero } from "@/components/page-hero";
 import { CtaBand } from "@/components/cta-band";
-import { formationServices, getService } from "@/lib/services";
+import { services, formationServices, getService } from "@/lib/services";
 import { ServiceDetail } from "@/components/service-detail";
 import type { Metadata, ResolvingMetadata } from "next";
+
+export const dynamicParams = false;
+
+export async function generateStaticParams() {
+  return [
+    { category: "business-formation" },
+    ...services.map((s) => ({ category: s.slug })),
+  ];
+}
 
 type Props = {
  params: Promise<{ category: string }>;

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/integrations/supabase/server";
 import { LEAD_STATUSES } from "@/lib/constants";
+import { sanitizeSearchTerm } from "@/lib/search";
 import { formatAdminDate } from "@/lib/format-date";
 
 export default async function LeadsPage({
@@ -28,16 +29,7 @@ export default async function LeadsPage({
 
  // Search filter - sanitize tightly
  let rawSearch = typeof resolvedParams['search'] === "string" ? resolvedParams['search'] : "";
- rawSearch = rawSearch.trim().slice(0, 100);
- 
- // Escape PostgREST LIKE wildcards (%, _, *) and backslash.
- // Double-quote the resulting string and escape existing double quotes to protect commas and parentheses in .or()
- let safeSearch = rawSearch
- .replace(/\\/g, "\\\\")
- .replace(/%/g, "\\%")
- .replace(/_/g, "\\_")
- .replace(/\*/g, "\\*")
- .replace(/"/g, '""');
+ let safeSearch = sanitizeSearchTerm(rawSearch);
 
  const supabase = await createClient();
  
