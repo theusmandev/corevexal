@@ -4,7 +4,7 @@ import { LEAD_STATUSES } from "@/lib/constants";
 import { formatAdminDate } from "@/lib/format-date";
 
 export const metadata = {
-  robots: "noindex, nofollow"
+  robots: "noindex, nofollow",
 };
 
 export default async function AdminDashboardPage() {
@@ -20,23 +20,38 @@ export default async function AdminDashboardPage() {
     { count: inProgressCount, error: inProgressError },
     { count: completedCount, error: completedError },
     { count: recentCount, error: recentError },
-    { data: latestLeads, error: latestError }
+    { data: latestLeads, error: latestError },
   ] = await Promise.all([
     supabase.from("leads").select("*", { count: "exact", head: true }),
     supabase.from("leads").select("*", { count: "exact", head: true }).eq("status", "New"),
-    supabase.from("leads").select("*", { count: "exact", head: true }).in("status", ["Contacted", "In Progress", "Waiting for Client"]),
-    supabase.from("leads").select("*", { count: "exact", head: true }).in("status", ["Completed", "Closed"]),
-    supabase.from("leads").select("*", { count: "exact", head: true }).gte("created_at", sevenDaysIso),
-    supabase.from("leads").select("id, full_name, service_requested, status, created_at").order("created_at", { ascending: false }).limit(5),
+    supabase
+      .from("leads")
+      .select("*", { count: "exact", head: true })
+      .in("status", ["Contacted", "In Progress", "Waiting for Client"]),
+    supabase
+      .from("leads")
+      .select("*", { count: "exact", head: true })
+      .in("status", ["Completed", "Closed"]),
+    supabase
+      .from("leads")
+      .select("*", { count: "exact", head: true })
+      .gte("created_at", sevenDaysIso),
+    supabase
+      .from("leads")
+      .select("id, full_name, service_requested, status, created_at")
+      .order("created_at", { ascending: false })
+      .limit(5),
   ]);
 
-  const statusPromises = LEAD_STATUSES.map(s => supabase.from("leads").select("*", { count: "exact", head: true }).eq("status", s));
+  const statusPromises = LEAD_STATUSES.map((s) =>
+    supabase.from("leads").select("*", { count: "exact", head: true }).eq("status", s),
+  );
   const statusResults = await Promise.all(statusPromises);
 
-  const breakdownError = statusResults.some(r => r.error) || totalError;
+  const breakdownError = statusResults.some((r) => r.error) || totalError;
   let accountedTotal = 0;
   const statusCounts: Record<string, number> = {};
-  
+
   if (!breakdownError) {
     LEAD_STATUSES.forEach((s, i) => {
       const cnt = statusResults[i]?.count ?? 0;
@@ -54,21 +69,41 @@ export default async function AdminDashboardPage() {
       <h1 className="font-display text-3xl font-bold mb-8">Dashboard</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <Link href="/admin/leads" className="block rounded-lg border border-border bg-surface p-6 hover:border-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+        <Link
+          href="/admin/leads"
+          className="block rounded-lg border border-border bg-surface p-6 hover:border-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+        >
           <h2 className="text-sm font-bold uppercase text-muted-foreground">Total Leads</h2>
-          <p className="mt-2 text-4xl font-display font-bold">{totalError ? "-" : totalCount || 0}</p>
+          <p className="mt-2 text-4xl font-display font-bold">
+            {totalError ? "-" : totalCount || 0}
+          </p>
         </Link>
-        <Link href="/admin/leads?status=New" className="block rounded-lg border border-border bg-surface p-6 hover:border-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+        <Link
+          href="/admin/leads?status=New"
+          className="block rounded-lg border border-border bg-surface p-6 hover:border-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+        >
           <h2 className="text-sm font-bold uppercase text-muted-foreground">New</h2>
-          <p className="mt-2 text-4xl font-display font-bold text-primary">{newError ? "-" : newCount || 0}</p>
+          <p className="mt-2 text-4xl font-display font-bold text-primary">
+            {newError ? "-" : newCount || 0}
+          </p>
         </Link>
-        <Link href="/admin/leads?status=Contacted,In%20Progress,Waiting%20for%20Client" className="block rounded-lg border border-border bg-surface p-6 hover:border-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+        <Link
+          href="/admin/leads?status=Contacted,In%20Progress,Waiting%20for%20Client"
+          className="block rounded-lg border border-border bg-surface p-6 hover:border-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+        >
           <h2 className="text-sm font-bold uppercase text-muted-foreground">In Progress</h2>
-          <p className="mt-2 text-4xl font-display font-bold text-amber-500">{inProgressError ? "-" : inProgressCount || 0}</p>
+          <p className="mt-2 text-4xl font-display font-bold text-amber-500">
+            {inProgressError ? "-" : inProgressCount || 0}
+          </p>
         </Link>
-        <Link href="/admin/leads?status=Completed,Closed" className="block rounded-lg border border-border bg-surface p-6 hover:border-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+        <Link
+          href="/admin/leads?status=Completed,Closed"
+          className="block rounded-lg border border-border bg-surface p-6 hover:border-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+        >
           <h2 className="text-sm font-bold uppercase text-muted-foreground">Closed / Completed</h2>
-          <p className="mt-2 text-4xl font-display font-bold text-muted-foreground">{completedError ? "-" : completedCount || 0}</p>
+          <p className="mt-2 text-4xl font-display font-bold text-muted-foreground">
+            {completedError ? "-" : completedCount || 0}
+          </p>
         </Link>
       </div>
 
@@ -101,7 +136,10 @@ export default async function AdminDashboardPage() {
                   </tr>
                 ) : (
                   latestLeads.map((lead) => (
-                    <tr key={lead.id} className="border-b border-border last:border-0 hover:bg-background transition-colors">
+                    <tr
+                      key={lead.id}
+                      className="border-b border-border last:border-0 hover:bg-background transition-colors"
+                    >
                       <td className="px-4 py-3 font-medium">{lead.full_name}</td>
                       <td className="px-4 py-3">{lead.service_requested}</td>
                       <td className="px-4 py-3">
@@ -113,7 +151,10 @@ export default async function AdminDashboardPage() {
                         {formatAdminDate(lead.created_at)}
                       </td>
                       <td className="px-4 py-3">
-                        <Link href={`/admin/leads/${lead.id}`} className="text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                        <Link
+                          href={`/admin/leads/${lead.id}`}
+                          className="text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                        >
                           View
                         </Link>
                       </td>
@@ -140,11 +181,13 @@ export default async function AdminDashboardPage() {
                 ))}
               </ul>
             )}
-            
+
             <div className="mt-6 pt-6 border-t border-border">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Last 7 Days</span>
-                <span className="font-bold text-primary">{recentError ? "-" : recentCount || 0}</span>
+                <span className="font-bold text-primary">
+                  {recentError ? "-" : recentCount || 0}
+                </span>
               </div>
             </div>
           </div>

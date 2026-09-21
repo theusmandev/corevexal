@@ -258,13 +258,13 @@ Corevexal logo
 
 Services
 
-  Business Formation
+Business Formation
 
-  Business Banking
+Business Banking
 
-  Payment Platforms
+Payment Platforms
 
-  Digital & Technology
+Digital & Technology
 
 Solutions
 
@@ -1820,29 +1820,29 @@ Example:
 
 Business Formation
 
-  UK LTD
+UK LTD
 
-  US LLC
+US LLC
 
-  Future: UAE Company
+Future: UAE Company
 
-  Future: Canada Company
+Future: Canada Company
 
-  Future: EU Company
+Future: EU Company
 
 Payment Platforms
 
-  Wise
+Wise
 
-  Payoneer
+Payoneer
 
-  PayPal
+PayPal
 
-  Stripe
+Stripe
 
-  TapTap
+TapTap
 
-  Future platforms
+Future platforms
 
 This must be scalable.
 
@@ -2030,15 +2030,15 @@ The primary business should clearly be:
 
 BUSINESS FORMATION
 
-+
+-
 
 BUSINESS FINANCIAL INFRASTRUCTURE
 
-+
+-
 
 PAYMENT PLATFORM SETUP
 
-+
+-
 
 DIGITAL TECHNOLOGY
 

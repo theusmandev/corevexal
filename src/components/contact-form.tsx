@@ -29,10 +29,12 @@ export function ContactForm() {
   const [state, formAction, isPending] = useActionState(submitContact, { success: false });
 
   const countryOptions = useMemo(() => {
-    return [...COUNTRY_CODES].map(code => ({
-      code,
-      name: getCountryName(code)
-    })).sort((a, b) => a.name.localeCompare(b.name));
+    return [...COUNTRY_CODES]
+      .map((code) => ({
+        code,
+        name: getCountryName(code),
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name));
   }, []);
 
   if (state.success)
@@ -60,15 +62,41 @@ export function ContactForm() {
       </div>
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Full Name" name="fullName" required error={state.fieldErrors?.["fullName"]} />
-        <Field label="Email" name="email" type="email" required error={state.fieldErrors?.["email"]} />
+        <Field
+          label="Email"
+          name="email"
+          type="email"
+          required
+          error={state.fieldErrors?.["email"]}
+        />
         <Field label="Phone" name="phone" type="tel" error={state.fieldErrors?.["phone"]} />
-        <CountrySelectField label="Country" name="country" options={countryOptions} error={state.fieldErrors?.["country"]} />
+        <CountrySelectField
+          label="Country"
+          name="country"
+          options={countryOptions}
+          error={state.fieldErrors?.["country"]}
+        />
         <Field label="Company Name" name="companyName" error={state.fieldErrors?.["companyName"]} />
-        <Field label="Business Type" name="businessType" required error={state.fieldErrors?.["businessType"]} />
+        <Field
+          label="Business Type"
+          name="businessType"
+          required
+          error={state.fieldErrors?.["businessType"]}
+        />
       </div>
-      <SelectField label="Company Status" name="companyStatus" options={statuses} error={state.fieldErrors?.["companyStatus"]} />
-      <SelectField label="Service Needed" name="serviceRequested" options={options} error={state.fieldErrors?.["serviceRequested"]} />
-      
+      <SelectField
+        label="Company Status"
+        name="companyStatus"
+        options={statuses}
+        error={state.fieldErrors?.["companyStatus"]}
+      />
+      <SelectField
+        label="Service Needed"
+        name="serviceRequested"
+        options={options}
+        error={state.fieldErrors?.["serviceRequested"]}
+      />
+
       <label className="grid gap-2 text-sm font-semibold">
         Message
         <textarea
@@ -79,15 +107,17 @@ export function ContactForm() {
           className={`border bg-background px-4 py-3 font-normal focus:border-primary ${state.fieldErrors?.["message"] ? "border-destructive" : "border-input"}`}
           placeholder="Tell us what you are building and where you need guidance."
         />
-        {state.fieldErrors?.["message"] && <span className="text-xs text-destructive">{state.fieldErrors["message"][0]}</span>}
+        {state.fieldErrors?.["message"] && (
+          <span className="text-xs text-destructive">{state.fieldErrors["message"][0]}</span>
+        )}
       </label>
-      
+
       {state.error && (
         <p role="alert" className="text-sm text-destructive font-medium">
           {state.error}
         </p>
       )}
-      
+
       <Button disabled={isPending} size="lg" className="w-full sm:w-fit">
         {isPending ? (
           <>
@@ -98,7 +128,7 @@ export function ContactForm() {
           "Submit Request"
         )}
       </Button>
-      
+
       <p className="text-xs leading-5 text-muted-foreground">
         Protected by a hidden spam trap. By submitting, you agree to our privacy policy.
       </p>
@@ -133,15 +163,15 @@ function Field({
   );
 }
 
-function SelectField({ 
-  label, 
-  name, 
-  options, 
-  error 
-}: { 
-  label: string; 
-  name: string; 
-  options: string[]; 
+function SelectField({
+  label,
+  name,
+  options,
+  error,
+}: {
+  label: string;
+  name: string;
+  options: string[];
   error?: string[] | undefined;
 }) {
   return (
@@ -165,15 +195,15 @@ function SelectField({
   );
 }
 
-export function CountrySelectField({ 
-  label, 
-  name, 
-  options, 
-  error 
-}: { 
-  label: string; 
-  name: string; 
-  options: { code: string; name: string }[]; 
+export function CountrySelectField({
+  label,
+  name,
+  options,
+  error,
+}: {
+  label: string;
+  name: string;
+  options: { code: string; name: string }[];
   error?: string[] | undefined;
 }) {
   return (
@@ -190,7 +220,9 @@ export function CountrySelectField({
           Select an option
         </option>
         {options.map((opt) => (
-          <option key={opt.code} value={opt.code}>{opt.name}</option>
+          <option key={opt.code} value={opt.code}>
+            {opt.name}
+          </option>
         ))}
       </select>
       {error && <span className="text-xs text-destructive">{error[0]}</span>}
