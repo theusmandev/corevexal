@@ -74,36 +74,56 @@ export default async function AdminDashboardPage() {
           className="block rounded-lg border border-border bg-surface p-6 hover:border-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
         >
           <h2 className="text-sm font-bold uppercase text-muted-foreground">Total Leads</h2>
-          <p className="mt-2 text-4xl font-display font-bold">
-            {totalError ? "-" : totalCount || 0}
-          </p>
+          {totalError ? (
+            <p className="mt-2 text-sm text-destructive font-semibold" role="alert">
+              Could not load this figure
+            </p>
+          ) : (
+            <p className="mt-2 text-4xl font-display font-bold">{totalCount || 0}</p>
+          )}
         </Link>
         <Link
           href="/admin/leads?status=New"
           className="block rounded-lg border border-border bg-surface p-6 hover:border-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
         >
           <h2 className="text-sm font-bold uppercase text-muted-foreground">New</h2>
-          <p className="mt-2 text-4xl font-display font-bold text-primary">
-            {newError ? "-" : newCount || 0}
-          </p>
+          {newError ? (
+            <p className="mt-2 text-sm text-destructive font-semibold" role="alert">
+              Could not load this figure
+            </p>
+          ) : (
+            <p className="mt-2 text-4xl font-display font-bold text-primary">{newCount || 0}</p>
+          )}
         </Link>
         <Link
           href="/admin/leads?status=Contacted,In%20Progress,Waiting%20for%20Client"
           className="block rounded-lg border border-border bg-surface p-6 hover:border-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
         >
           <h2 className="text-sm font-bold uppercase text-muted-foreground">In Progress</h2>
-          <p className="mt-2 text-4xl font-display font-bold text-amber-500">
-            {inProgressError ? "-" : inProgressCount || 0}
-          </p>
+          {inProgressError ? (
+            <p className="mt-2 text-sm text-destructive font-semibold" role="alert">
+              Could not load this figure
+            </p>
+          ) : (
+            <p className="mt-2 text-4xl font-display font-bold text-amber-500">
+              {inProgressCount || 0}
+            </p>
+          )}
         </Link>
         <Link
           href="/admin/leads?status=Completed,Closed"
           className="block rounded-lg border border-border bg-surface p-6 hover:border-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
         >
           <h2 className="text-sm font-bold uppercase text-muted-foreground">Closed / Completed</h2>
-          <p className="mt-2 text-4xl font-display font-bold text-muted-foreground">
-            {completedError ? "-" : completedCount || 0}
-          </p>
+          {completedError ? (
+            <p className="mt-2 text-sm text-destructive font-semibold" role="alert">
+              Could not load this figure
+            </p>
+          ) : (
+            <p className="mt-2 text-4xl font-display font-bold text-muted-foreground">
+              {completedCount || 0}
+            </p>
+          )}
         </Link>
       </div>
 
@@ -124,8 +144,12 @@ export default async function AdminDashboardPage() {
               <tbody>
                 {latestError ? (
                   <tr>
-                    <td colSpan={5} className="px-4 py-8 text-center text-destructive">
-                      Error loading recent leads.
+                    <td
+                      colSpan={5}
+                      className="px-4 py-8 text-center text-destructive font-semibold"
+                      role="alert"
+                    >
+                      Could not load recent leads.
                     </td>
                   </tr>
                 ) : !latestLeads || latestLeads.length === 0 ? (
@@ -170,7 +194,9 @@ export default async function AdminDashboardPage() {
           <h2 className="text-lg font-bold mb-4">Breakdown</h2>
           <div className="rounded-md border border-border bg-surface p-4">
             {breakdownError ? (
-              <p className="text-sm text-destructive">Error loading breakdown.</p>
+              <p className="text-sm text-destructive font-semibold" role="alert">
+                Could not load breakdown.
+              </p>
             ) : (
               <ul className="space-y-3 text-sm">
                 {Object.entries(statusCounts).map(([status, cnt]) => (
@@ -186,7 +212,13 @@ export default async function AdminDashboardPage() {
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Last 7 Days</span>
                 <span className="font-bold text-primary">
-                  {recentError ? "-" : recentCount || 0}
+                  {recentError ? (
+                    <span className="text-destructive font-semibold" role="alert">
+                      Could not load
+                    </span>
+                  ) : (
+                    <span className="font-bold text-primary">{recentCount || 0}</span>
+                  )}
                 </span>
               </div>
             </div>

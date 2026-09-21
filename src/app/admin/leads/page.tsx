@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/integrations/supabase/server";
-import { LEAD_STATUSES } from "@/lib/constants";
+import { LEAD_STATUSES, isLeadStatus } from "@/lib/constants";
 import { sanitizeSearchTerm } from "@/lib/search";
 import { formatAdminDate } from "@/lib/format-date";
 
@@ -25,7 +25,7 @@ export default async function LeadsPage({
   const statusFilters = statusParam
     .split(",")
     .map((s) => s.trim())
-    .filter((s) => (LEAD_STATUSES as readonly string[]).includes(s)) as (typeof LEAD_STATUSES)[number][];
+    .filter(isLeadStatus);
 
   // Search filter - sanitize tightly
   const rawSearch = typeof resolvedParams["search"] === "string" ? resolvedParams["search"] : "";

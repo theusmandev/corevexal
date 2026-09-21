@@ -3,7 +3,7 @@
 import { createClient } from "@/integrations/supabase/server";
 import { redirect } from "next/navigation";
 
-export async function login(formData: FormData) {
+export async function login(prevState: { success: boolean; error?: string }, formData: FormData) {
   const supabase = await createClient();
 
   const data = {
@@ -14,7 +14,7 @@ export async function login(formData: FormData) {
   const { data: authData, error } = await supabase.auth.signInWithPassword(data);
 
   if (error) {
-    throw new Error(error.message);
+    return { success: false, error: error.message };
   }
 
   // Check if user has admin role

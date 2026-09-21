@@ -2,7 +2,7 @@
 
 import { createClient } from "@/integrations/supabase/server";
 import { revalidatePath } from "next/cache";
-import { LEAD_STATUSES, type LeadStatus } from "@/lib/constants";
+import { LEAD_STATUSES, isLeadStatus, type LeadStatus } from "@/lib/constants";
 
 export async function updateLeadStatus(formData: FormData) {
   try {
@@ -13,7 +13,7 @@ export async function updateLeadStatus(formData: FormData) {
       return { success: false, error: "Invalid ID" };
     }
 
-    if (typeof status !== "string" || !LEAD_STATUSES.includes(status as LeadStatus)) {
+    if (!isLeadStatus(status)) {
       return { success: false, error: "Invalid status value" };
     }
 
@@ -39,7 +39,7 @@ export async function updateLeadStatus(formData: FormData) {
     // Update with .select() to verify RLS success. Must return exactly 1 row.
     const { data, error } = await supabase
       .from("leads")
-      .update({ status: status as never })
+      .update({ status: status })
       .eq("id", id)
       .select("id")
       .single();

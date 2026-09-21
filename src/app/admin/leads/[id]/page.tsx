@@ -42,7 +42,13 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
             <h1 className="font-display text-2xl font-bold">{lead.full_name}</h1>
             <p className="text-sm text-muted-foreground">{lead.email}</p>
           </div>
-          <form action={updateLeadStatus as never} className="flex items-center gap-2">
+          <form
+            action={async (formData) => {
+              "use server";
+              await updateLeadStatus(formData);
+            }}
+            className="flex items-center gap-2"
+          >
             <input type="hidden" name="id" value={lead.id} />
             <label htmlFor="status" className="sr-only">
               Status
