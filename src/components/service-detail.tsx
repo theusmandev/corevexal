@@ -1,13 +1,22 @@
 import Link from "next/link";
 import { ArrowRight, Check, FileText, Route as RouteIcon, Users } from "lucide-react";
-import type { Service } from "@/lib/services";
-import { sharedDisclaimer } from "@/lib/services";
+import type { PublishedService } from "@/lib/data/services";
+import { getIcon } from "@/lib/icon-registry";
 import { Button } from "./ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./ui/accordion";
 import { CtaBand } from "./cta-band";
 
-export function ServiceDetail({ service }: { service: Service }) {
-  const Icon = service.icon;
+// Fallback disclaimer in case the user doesn't have it elsewhere
+const sharedDisclaimer =
+  "Third-party providers independently make their own eligibility, verification, and approval decisions. Corevexal does not guarantee account opening or platform approval.";
+
+export function ServiceDetail({ service }: { service: PublishedService }) {
+  const Icon = getIcon(service.icon || "");
+  const features = (service.features as string[]) || [];
+  const requirements = (service.requirements as string[]) || [];
+  const processSteps = (service.process as string[]) || [];
+  const faqs = (service.faqs as { question: string; answer: string }[]) || [];
+
   return (
     <main>
       <section className="bg-deep text-inverse">
@@ -34,7 +43,7 @@ export function ServiceDetail({ service }: { service: Service }) {
           <div className="core-diagram">
             <Icon className="size-16 text-primary-text" />
             <span />
-            <p>{service.category}</p>
+            <p>{service.category_id}</p>
             <span />
             <p>Structured setup</p>
             <span />
@@ -47,10 +56,10 @@ export function ServiceDetail({ service }: { service: Service }) {
           <div>
             <p className="eyebrow">Overview</p>
             <h2 className="section-title mt-4">A clear path, built around your business.</h2>
-            <p className="mt-5 leading-7 text-muted-foreground">{service.shortDescription}</p>
+            <p className="mt-5 leading-7 text-muted-foreground">{service.short_description}</p>
           </div>
           <div className="grid gap-px bg-border sm:grid-cols-2">
-            {service.features.map((feature) => (
+            {features.map((feature) => (
               <div key={feature} className="flex min-h-28 items-start gap-4 bg-background p-6">
                 <Check className="mt-0.5 size-5 text-primary-text" />
                 <span className="font-semibold">{feature}</span>
@@ -67,7 +76,7 @@ export function ServiceDetail({ service }: { service: Service }) {
               <h2 className="font-display text-3xl font-bold">What to prepare</h2>
             </div>
             <ul className="mt-7 divide-y divide-border border-y border-border">
-              {service.requirements.map((item) => (
+              {requirements.map((item) => (
                 <li className="py-4 text-muted-foreground" key={item}>
                   {item}
                 </li>
@@ -80,7 +89,7 @@ export function ServiceDetail({ service }: { service: Service }) {
               <h2 className="font-display text-3xl font-bold">The process</h2>
             </div>
             <ol className="mt-7 space-y-3">
-              {service.process.map((item, index) => (
+              {processSteps.map((item, index) => (
                 <li key={item} className="flex gap-5 border border-border bg-background p-5">
                   <span className="font-mono text-sm font-bold text-primary-text">
                     {String(index + 1).padStart(2, "0")}
@@ -99,7 +108,7 @@ export function ServiceDetail({ service }: { service: Service }) {
             <h2 className="font-display text-3xl font-bold">Frequently asked questions</h2>
           </div>
           <Accordion type="single" collapsible className="mt-8">
-            {service.faqs.map((item, index) => (
+            {faqs.map((item, index) => (
               <AccordionItem value={`q-${index}`} key={item.question}>
                 <AccordionTrigger className="text-left text-base">{item.question}</AccordionTrigger>
                 <AccordionContent className="max-w-3xl leading-7 text-muted-foreground">
