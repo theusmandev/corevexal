@@ -326,6 +326,7 @@ export type Database = {
           display_order: number;
           faqs: Json;
           features: Json;
+          icon: string | null;
           id: string;
           process: Json;
           related_services: Json;
@@ -345,6 +346,7 @@ export type Database = {
           display_order?: number;
           faqs?: Json;
           features?: Json;
+          icon?: string | null;
           id?: string;
           process?: Json;
           related_services?: Json;
@@ -364,6 +366,7 @@ export type Database = {
           display_order?: number;
           faqs?: Json;
           features?: Json;
+          icon?: string | null;
           id?: string;
           process?: Json;
           related_services?: Json;
@@ -571,3 +574,4 @@ export const Constants = {
     },
   },
 } as const;
+

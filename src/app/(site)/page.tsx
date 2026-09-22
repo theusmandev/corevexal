@@ -7,13 +7,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import {
-  formationServices,
-  paymentPlatforms,
-  platformContent,
-  serviceGroups,
-} from "@/lib/services";
+import { getPublishedCategories } from "@/lib/data/services";
+import { getIcon, getCategoryIcon } from "@/lib/icon-registry";
 import { HeroVisual } from "@/components/hero-visual";
+
+export const revalidate = 60;
 
 export const metadata = {
   title: "Corevexal | Business Formation & Financial Solutions",
@@ -21,7 +19,13 @@ export const metadata = {
     "Corevexal helps entrepreneurs and businesses with company formation, business banking guidance, payment platform setup, and digital solutions.",
 };
 
-export default function Home() {
+export default async function Home() {
+  const categories = await getPublishedCategories();
+  const businessFormation = categories.find((c) => c.slug === "business-formation");
+  const formationServices = businessFormation?.services || [];
+  const paymentPlatformsCat = categories.find((c) => c.slug === "payment-platforms");
+  const paymentPlatforms = paymentPlatformsCat?.services || [];
+
   const journey = [
     "Idea",
     "Business Formation",
@@ -65,15 +69,18 @@ export default function Home() {
 
       <section className="border-y border-border">
         <div className="site-container grid sm:grid-cols-2 lg:grid-cols-4">
-          {serviceGroups.map(({ title, icon: Icon }) => (
-            <div
-              key={title}
-              className="flex items-center gap-4 border-b border-border py-6 sm:px-5 lg:border-b-0 lg:border-r first:pl-0 last:border-r-0"
-            >
-              <Icon className="size-5 text-primary-text" />
-              <span className="text-sm font-bold">{title}</span>
-            </div>
-          ))}
+          {categories.map((c) => {
+            const Icon = getCategoryIcon(c.slug);
+            return (
+              <div
+                key={c.slug || c.name}
+                className="flex items-center gap-4 border-b border-border py-6 sm:px-5 lg:border-b-0 lg:border-r first:pl-0 last:border-r-0"
+              >
+                <Icon className="size-5 text-primary-text" />
+                <span className="text-sm font-bold">{c.name}</span>
+              </div>
+            );
+          })}
         </div>
       </section>
 
@@ -88,12 +95,15 @@ export default function Home() {
             </p>
           </div>
           <div className="mt-12 grid gap-px bg-inverse/15 sm:grid-cols-2 lg:grid-cols-3">
-            {formationServices.map(({ title, icon: Icon }) => (
-              <div className="bg-deep p-6" key={title}>
-                <Icon className="text-primary-text" />
-                <h3 className="mt-8 font-display text-lg font-bold">{title}</h3>
-              </div>
-            ))}
+            {formationServices.map((service) => {
+              const Icon = getIcon(service.icon || "");
+              return (
+                <div className="bg-deep p-6" key={service.slug}>
+                  <Icon className="text-primary-text" />
+                  <h3 className="mt-8 font-display text-lg font-bold">{service.title}</h3>
+                </div>
+              );
+            })}
           </div>
           <Button asChild className="mt-10">
             <Link href="/services/business-formation">
@@ -147,14 +157,8 @@ export default function Home() {
           </div>
           <div className="mt-10 grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-5">
             {paymentPlatforms.map((p) => (
-              <Link
-                href={`/services/payment-platforms/${p}`}
-                className="group bg-background p-6"
-                key={p}
-              >
-                <p className="font-display text-xl font-bold">
-                  {platformContent[p].name.replace(" Business", "")}
-                </p>
+              <Link href={`/services/${p.slug}`} className="group bg-background p-6" key={p.slug}>
+                <p className="font-display text-xl font-bold">{p.title.replace(" Business", "")}</p>
                 <p className="mt-8 text-xs font-bold uppercase text-muted-foreground group-hover:text-primary-text">
                   Setup guidance <ArrowRight className="ml-1 inline size-3" />
                 </p>
