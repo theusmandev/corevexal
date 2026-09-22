@@ -13,6 +13,7 @@ import {
   platformContent,
   serviceGroups,
 } from "@/lib/services";
+import { HeroVisual } from "@/components/hero-visual";
 
 export const metadata = {
   title: "Corevexal | Business Formation & Financial Solutions",
@@ -58,16 +59,7 @@ export default function Home() {
               </Button>
             </div>
           </div>
-          <div className="relative mx-auto aspect-square w-full max-w-[34rem] border border-border bg-surface p-7">
-            <div className="absolute inset-1/2 size-40 -translate-x-1/2 -translate-y-1/2 rotate-45 border-2 border-primary" />
-            <div className="absolute inset-1/2 size-16 -translate-x-1/2 -translate-y-1/2 bg-primary" />
-            <p className="absolute left-6 top-6 text-xs font-bold uppercase">Business</p>
-            <p className="absolute right-6 top-1/3 text-xs font-bold uppercase">Formation</p>
-            <p className="absolute bottom-1/3 left-6 text-xs font-bold uppercase">Finance</p>
-            <p className="absolute bottom-6 right-6 text-xs font-bold uppercase">Digital growth</p>
-            <div className="absolute inset-12 border border-border" />
-            <div className="absolute inset-24 border border-border" />
-          </div>
+          <HeroVisual />
         </div>
       </section>
 
