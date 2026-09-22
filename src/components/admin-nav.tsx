@@ -30,6 +30,28 @@ export function AdminNav() {
       >
         Leads
       </Link>
+      <Link
+        href="/admin/categories"
+        className={
+          pathname.startsWith("/admin/categories")
+            ? "text-foreground font-bold"
+            : "text-muted-foreground hover:text-foreground transition-colors"
+        }
+        aria-current={pathname.startsWith("/admin/categories") ? "page" : undefined}
+      >
+        Categories
+      </Link>
+      <Link
+        href="/admin/services"
+        className={
+          pathname.startsWith("/admin/services")
+            ? "text-foreground font-bold"
+            : "text-muted-foreground hover:text-foreground transition-colors"
+        }
+        aria-current={pathname.startsWith("/admin/services") ? "page" : undefined}
+      >
+        Services
+      </Link>
     </nav>
   );
 }
