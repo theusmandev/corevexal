@@ -1,3 +1,8 @@
+/**
+ * @deprecated This file is deprecated. It was previously used as a static
+ * data source for services. Services are now fetched from the Supabase database.
+ * This file is kept only for reference and should not be imported in UI components.
+ */
 import {
   BadgeDollarSign,
   Banknote,
