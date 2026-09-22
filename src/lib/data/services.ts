@@ -5,8 +5,8 @@ import type { Database } from "@/integrations/supabase/types";
 // cache these requests and statically generate pages (SSG) at build time.
 // If we used the cookie-based server client, Next.js would mark all routes
 // using this file as dynamic.
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
+const supabaseAnonKey = process.env["NEXT_PUBLIC_SUPABASE_ANON_KEY"]!;
 
 const supabaseStatic = createClient<Database>(supabaseUrl, supabaseAnonKey);
 
