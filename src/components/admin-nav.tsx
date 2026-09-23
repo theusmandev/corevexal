@@ -52,6 +52,17 @@ export function AdminNav() {
       >
         Services
       </Link>
+      <Link
+        href="/admin/settings"
+        className={
+          pathname.startsWith("/admin/settings")
+            ? "text-foreground font-bold"
+            : "text-muted-foreground hover:text-foreground transition-colors"
+        }
+        aria-current={pathname.startsWith("/admin/settings") ? "page" : undefined}
+      >
+        Settings
+      </Link>
     </nav>
   );
 }
