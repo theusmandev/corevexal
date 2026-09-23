@@ -1,6 +1,7 @@
 import { PageHero } from "@/components/page-hero";
 import { ContactForm } from "@/components/contact-form";
 import type { Metadata } from "next";
+import { getPublicSettings } from "@/lib/data/settings";
 
 export const metadata: Metadata = {
   title: "Contact Corevexal | Start a Request",
@@ -18,7 +19,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const { contactInfo } = await getPublicSettings();
+  const hasContact = contactInfo && (contactInfo.email || contactInfo.phone || contactInfo.address);
+
   return (
     <main>
       <PageHero
@@ -34,6 +38,28 @@ export default function ContactPage() {
               Share your current position and intended service. We’ll use this information to
               understand the most relevant next step.
             </p>
+            {hasContact && (
+              <div className="mt-8 space-y-4 text-sm text-foreground">
+                {contactInfo.email && (
+                  <div>
+                    <strong className="block text-xs uppercase text-muted-foreground">Email</strong>
+                    <a href={`mailto:${contactInfo.email}`} className="font-medium hover:text-primary transition-colors">{contactInfo.email}</a>
+                  </div>
+                )}
+                {contactInfo.phone && (
+                  <div>
+                    <strong className="block text-xs uppercase text-muted-foreground">Phone</strong>
+                    <a href={`tel:${contactInfo.phone}`} className="font-medium hover:text-primary transition-colors">{contactInfo.phone}</a>
+                  </div>
+                )}
+                {contactInfo.address && (
+                  <div>
+                    <strong className="block text-xs uppercase text-muted-foreground">Address</strong>
+                    <p className="whitespace-pre-line">{contactInfo.address}</p>
+                  </div>
+                )}
+              </div>
+            )}
             <p className="mt-8 border-l-2 border-primary pl-5 text-sm leading-6 text-muted-foreground">
               Submitting a request does not create an advisor-client relationship or guarantee
               third-party eligibility or approval.
