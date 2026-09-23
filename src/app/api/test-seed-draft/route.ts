@@ -3,13 +3,13 @@ import { requireAdmin } from "@/lib/admin";
 
 /**
  * TEMPORARY test-only endpoint.
- * GET /api/test-seed-draft  → inserts a draft service with slug "test-draft-service"
+ * POST /api/test-seed-draft  → inserts a draft service with slug "test-draft-service"
  * DELETE /api/test-seed-draft → removes it
  * Protected by requireAdmin() — must be called while authenticated as admin.
  * REMOVE THIS FILE after draft preview testing is complete.
  */
 
-export async function GET() {
+export async function POST() {
   const { supabase } = await requireAdmin();
 
   // Get a published category to satisfy the FK constraint
