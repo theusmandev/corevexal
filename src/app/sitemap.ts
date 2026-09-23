@@ -1,6 +1,8 @@
 import { MetadataRoute } from "next";
 import { getAllPublishedServiceSlugs, getPublishedCategories } from "@/lib/data/services";
 
+export const revalidate = 60;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env["NEXT_PUBLIC_APP_URL"] || "https://corevexal.com";
 

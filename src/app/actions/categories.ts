@@ -93,6 +93,7 @@ export async function createCategory(formData: FormData) {
 
   revalidatePath("/admin/categories");
   revalidatePath("/services");
+  revalidatePath("/sitemap.xml");
   return { id: data.id };
 }
 
@@ -146,6 +147,7 @@ export async function updateCategory(id: string, formData: FormData) {
   revalidatePath("/admin/categories");
   revalidatePath(`/admin/categories/${id}`);
   revalidatePath("/services");
+  revalidatePath("/sitemap.xml");
   return { success: true };
 }
 
@@ -174,5 +176,6 @@ export async function deleteCategory(id: string) {
 
   revalidatePath("/admin/categories");
   revalidatePath("/services");
+  revalidatePath("/sitemap.xml");
   return { success: true };
 }

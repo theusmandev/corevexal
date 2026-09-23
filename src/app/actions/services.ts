@@ -129,6 +129,7 @@ export async function createService(formData: FormData) {
 
   revalidatePath("/admin/services");
   revalidatePath("/services");
+  revalidatePath("/sitemap.xml");
   return { id: inserted.id };
 }
 
@@ -186,6 +187,7 @@ export async function updateService(id: string, formData: FormData) {
   revalidatePath(`/admin/services/${id}`);
   revalidatePath("/services");
   revalidatePath(`/services/${data.slug}`);
+  revalidatePath("/sitemap.xml");
   return { success: true };
 }
 
@@ -220,6 +222,7 @@ export async function deleteService(id: string) {
 
   revalidatePath("/admin/services");
   revalidatePath("/services");
+  revalidatePath("/sitemap.xml");
 
   // Return a warning if other services referenced this slug
   if (referencing && referencing.length > 0) {

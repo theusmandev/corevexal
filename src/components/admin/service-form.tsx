@@ -599,9 +599,14 @@ export function ServiceForm({
           </a>
         )}
         {isEditing && status === "draft" && (
-          <span className="inline-flex h-10 items-center px-4 text-sm text-muted-foreground">
-            Save as Draft first, then Preview will appear when Published.
-          </span>
+          <a
+            href={`/admin/preview/${slug}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex h-10 items-center justify-center rounded-md border border-amber-500/50 bg-amber-500/10 px-4 text-sm font-medium text-amber-700 hover:bg-amber-500/20 dark:text-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+          >
+            Preview Draft ↗
+          </a>
         )}
         <a
           href="/admin/services"
