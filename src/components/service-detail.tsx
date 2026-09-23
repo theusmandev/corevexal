@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, Check, FileText, Route as RouteIcon, Users } from "lucide-react";
-import type { PublishedService } from "@/lib/data/services";
+import { getRelatedServices, type PublishedService } from "@/lib/data/services";
 import { getIcon } from "@/lib/icon-registry";
 import { Button } from "./ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./ui/accordion";
@@ -10,12 +10,14 @@ import { CtaBand } from "./cta-band";
 const sharedDisclaimer =
   "Third-party providers independently make their own eligibility, verification, and approval decisions. Corevexal does not guarantee account opening or platform approval.";
 
-export function ServiceDetail({ service }: { service: PublishedService }) {
+export async function ServiceDetail({ service }: { service: PublishedService }) {
   const Icon = getIcon(service.icon || "");
   const features = (service.features as string[]) || [];
   const requirements = (service.requirements as string[]) || [];
   const processSteps = (service.process as string[]) || [];
   const faqs = (service.faqs as { question: string; answer: string }[]) || [];
+  const relatedSlugs = (service.related_services as string[]) || [];
+  const relatedServices = await getRelatedServices(relatedSlugs);
 
   return (
     <main>
@@ -123,6 +125,34 @@ export function ServiceDetail({ service }: { service: PublishedService }) {
           </p>
         </div>
       </section>
+      {relatedServices.length > 0 && (
+        <section className="section bg-surface">
+          <div className="site-container">
+            <h2 className="font-display text-3xl font-bold">Related services</h2>
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {relatedServices.map((rs) => {
+                const RSIcon = getIcon(rs.icon || "");
+                return (
+                  <Link
+                    key={rs.slug}
+                    href={`/services/${rs.slug}`}
+                    className="group min-h-52 bg-background p-7 transition-colors hover:bg-border block"
+                  >
+                    <RSIcon className="size-7 text-primary-text" />
+                    <h3 className="mt-6 font-display text-xl font-bold">{rs.title}</h3>
+                    <p className="mt-3 text-sm leading-6 text-muted-foreground line-clamp-3">
+                      {rs.short_description}
+                    </p>
+                    <div className="mt-5 flex items-center justify-between text-sm font-bold text-primary-text opacity-0 transition-opacity group-hover:opacity-100">
+                      View Service <ArrowRight className="size-4" />
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
       <CtaBand />
     </main>
   );
