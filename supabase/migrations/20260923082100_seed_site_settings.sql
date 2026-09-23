@@ -1,3 +1,4 @@
+
 -- Seed initial site settings safely (do nothing if already exists)
 INSERT INTO public.site_settings (key, value, is_public)
 VALUES
