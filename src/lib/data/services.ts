@@ -93,25 +93,3 @@ export async function getRelatedServices(slugs: string[]): Promise<PublishedServ
     .map((slug) => serviceMap.get(slug))
     .filter((s): s is PublishedService => s !== undefined);
 }
-
-/**
- * Fetches a service by slug regardless of status (draft or published).
- * Used exclusively for admin preview — callers must verify admin auth themselves.
- */
-export async function getServiceBySlugForPreview(
-  slug: string,
-): Promise<PublishedService | null> {
-  const { data, error } = await supabaseStatic
-    .from("services")
-    .select("*")
-    .eq("slug", slug)
-    .single();
-
-  if (error) {
-    if (error.code !== "PGRST116") {
-      console.error("Error fetching service for preview:", error.message);
-    }
-    return null;
-  }
-  return data;
-}

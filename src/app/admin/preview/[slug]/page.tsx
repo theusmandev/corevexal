@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import { requireAdmin } from "@/lib/admin";
-import { getServiceBySlugForPreview } from "@/lib/data/services";
 import { ServiceDetail } from "@/components/service-detail";
 import Link from "next/link";
 
@@ -10,18 +9,30 @@ export const metadata = { robots: { index: false } };
 type Props = { params: Promise<{ slug: string }> };
 
 export default async function AdminPreviewPage({ params }: Props) {
-  // requireAdmin redirects to /login or /portal if the visitor is not an
-  // authenticated admin, so no further auth check is needed below.
-  await requireAdmin();
+  // requireAdmin() verifies the visitor is an authenticated admin via getUser()
+  // and returns the cookie-based supabase client. That client carries the admin's
+  // JWT, which satisfies the RLS policy:
+  //   USING (status = 'published' OR has_role(auth.uid(), 'admin') OR ...)
+  // so draft rows are visible to this query.
+  const { supabase } = await requireAdmin();
 
   const { slug } = await params;
-  const service = await getServiceBySlugForPreview(slug);
+
+  const { data: service, error } = await supabase
+    .from("services")
+    .select("*")
+    .eq("slug", slug)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Admin preview fetch error:", error.message);
+  }
 
   if (!service) notFound();
 
   return (
     <div>
-      {/* Preview banner — only admins see this page, but make it obvious */}
+      {/* Preview banner — only admins can reach this page */}
       <div className="sticky top-0 z-50 flex items-center justify-between bg-amber-500/95 px-4 py-2 text-sm font-medium text-amber-950 backdrop-blur-sm">
         <span>
           🔍 Admin Preview — status:{" "}
