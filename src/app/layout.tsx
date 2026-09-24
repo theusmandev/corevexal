@@ -15,8 +15,10 @@ const sora = Sora({
   variable: "--font-display",
 });
 
+const siteUrl = process.env["NEXT_PUBLIC_APP_URL"] || "https://corevexal.com";
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env["NEXT_PUBLIC_APP_URL"] || "https://corevexal.com"),
+  metadataBase: new URL(siteUrl),
   title: "Corevexal | Business Formation & Financial Solutions",
   description:
     "Corevexal helps entrepreneurs and businesses with company formation, business banking guidance, payment platform setup, and digital solutions.",
@@ -26,8 +28,8 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "Corevexal",
-  url: "https://corevexal.com",
-  logo: "https://corevexal.com/brand/logo-mark.svg",
+  url: siteUrl,
+  logo: `${siteUrl}/brand/logo-mark.svg`,
 };
 
 export default function RootLayout({
