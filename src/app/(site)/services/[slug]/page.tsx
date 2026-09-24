@@ -12,20 +12,7 @@ import { getIcon, getCategoryIcon } from "@/lib/icon-registry";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
-export const revalidate = 60;
-export const dynamicParams = false;
-
-export async function generateStaticParams() {
-  const categories = await getPublishedCategories();
-  const serviceSlugs = await getAllPublishedServiceSlugs();
-
-  const categoryParams = categories.map((c) => ({ slug: c.slug }));
-  const serviceParams = serviceSlugs.map((slug) => ({ slug }));
-
-  const allSlugs = [...categoryParams, ...serviceParams];
-  const unique = Array.from(new Set(allSlugs.map((s) => s.slug))).map((slug) => ({ slug }));
-  return unique;
-}
+export const dynamic = "force-dynamic";
 
 type Props = {
   params: Promise<{ slug: string }>;

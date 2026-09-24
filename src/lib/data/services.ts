@@ -8,7 +8,16 @@ import type { Database } from "@/integrations/supabase/types";
 const supabaseUrl = process.env["NEXT_PUBLIC_SUPABASE_URL"]!;
 const supabaseAnonKey = process.env["NEXT_PUBLIC_SUPABASE_ANON_KEY"]!;
 
-const supabaseStatic = createClient<Database>(supabaseUrl, supabaseAnonKey);
+const supabaseStatic = createClient<Database>(supabaseUrl, supabaseAnonKey, {
+  global: {
+    fetch: (url, init) => {
+      return fetch(url, {
+        ...init,
+        next: { revalidate: 60 },
+      });
+    },
+  },
+});
 
 export type CategoryWithServices = Database["public"]["Tables"]["service_categories"]["Row"] & {
   services: Database["public"]["Tables"]["services"]["Row"][];
