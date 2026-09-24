@@ -2,26 +2,17 @@ import Link from "next/link";
 import { ArrowUpRight, Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
 import { Brand } from "./brand";
 import type { PublicSettings } from "@/lib/data/settings";
+import type { CategoryWithServices } from "@/lib/data/services";
 
-const groups = [
+// Static groups that don't depend on database content
+const staticGroups = [
   {
     title: "Business Formation",
     links: [
       ["UK LTD", "/services/uk-ltd-formation"],
       ["US LLC", "/services/us-llc-formation"],
       ["Company Setup", "/services/business-formation"],
-    ],
-  },
-  {
-    title: "Financial Solutions",
-    links: [
-      ["Business Banking", "/services/business-banking"],
-      ["Wise", "/services/payment-platforms/wise"],
-      ["Payoneer", "/services/payment-platforms/payoneer"],
-      ["PayPal", "/services/payment-platforms/paypal"],
-      ["Stripe", "/services/payment-platforms/stripe"],
-      ["TapTap", "/services/payment-platforms/taptap"],
-    ],
+    ] as [string, string][],
   },
   {
     title: "Digital",
@@ -30,7 +21,7 @@ const groups = [
       ["Software", "/services/digital-technology"],
       ["SaaS", "/services/digital-technology"],
       ["Automation", "/services/digital-technology"],
-    ],
+    ] as [string, string][],
   },
   {
     title: "Company",
@@ -40,7 +31,7 @@ const groups = [
       ["Resources", "/resources"],
       ["FAQ", "/faq"],
       ["Contact", "/contact"],
-    ],
+    ] as [string, string][],
   },
   {
     title: "Legal",
@@ -49,11 +40,42 @@ const groups = [
       ["Terms", "/legal/terms"],
       ["Cookies", "/legal/cookies"],
       ["Disclaimer", "/legal/disclaimer"],
-    ],
+    ] as [string, string][],
   },
-] as const;
+];
 
-export function SiteFooter({ settings }: { settings?: PublicSettings }) {
+/**
+ * Build the "Financial Solutions" footer group dynamically from Supabase
+ * category data so footer links always match the live service slugs.
+ *
+ * - "Business Banking" links to /services/business-banking (the category
+ *   overview page — intentional; the specific service slug is
+ *   business-banking-setup after the slug-collision fix).
+ * - Payment platform services are read directly from the payment-platforms
+ *   category so they can never drift out of sync again.
+ */
+function buildFinancialGroup(categories: CategoryWithServices[]) {
+  const paymentCat = categories.find((c) => c.slug === "payment-platforms");
+  const platformLinks: [string, string][] = paymentCat
+    ? paymentCat.services.map((s) => [s.title, `/services/${s.slug}`] as [string, string])
+    : [];
+
+  return {
+    title: "Financial Solutions",
+    links: [
+      ["Business Banking", "/services/business-banking"] as [string, string],
+      ...platformLinks,
+    ],
+  };
+}
+
+export function SiteFooter({
+  settings,
+  categories = [],
+}: {
+  settings?: PublicSettings;
+  categories?: CategoryWithServices[];
+}) {
   const hasContact = settings?.contactInfo && (settings.contactInfo.email || settings.contactInfo.phone || settings.contactInfo.address);
   const hasSocials = settings?.socialLinks && (settings.socialLinks.linkedin || settings.socialLinks.twitter || settings.socialLinks.instagram || settings.socialLinks.facebook);
 
@@ -117,7 +139,7 @@ export function SiteFooter({ settings }: { settings?: PublicSettings }) {
             </p>
           </div>
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-5">
-            {groups.map((group) => (
+            {([staticGroups[0], buildFinancialGroup(categories), ...staticGroups.slice(1)] as Array<{ title: string; links: [string, string][] }>).map((group) => (
               <div key={group.title}>
                 <h2 className="text-xs font-bold uppercase text-inverse">{group.title}</h2>
                 <ul className="mt-4 space-y-3">

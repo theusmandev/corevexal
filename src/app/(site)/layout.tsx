@@ -19,7 +19,7 @@ export default async function SiteLayout({
       <AnnouncementBanner banner={settings.announcementBanner} />
       <SiteHeader categories={categories} />
       <main className="flex-1">{children}</main>
-      <SiteFooter settings={settings} />
+      <SiteFooter settings={settings} categories={categories} />
     </div>
   );
 }
