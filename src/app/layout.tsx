@@ -29,7 +29,7 @@ const jsonLd = {
   "@type": "Organization",
   name: "Corevexal",
   url: siteUrl,
-  logo: `${siteUrl}/brand/logo-mark.svg`,
+  logo: `${siteUrl}/brand/mark.svg`,
 };
 
 export default function RootLayout({

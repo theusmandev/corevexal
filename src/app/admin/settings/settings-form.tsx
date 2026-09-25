@@ -36,7 +36,7 @@ export function SettingsForm({ settings }: { settings: PublicSettings }) {
 
   return (
     <div className="space-y-10">
-      <section className="rounded-xl border border-border bg-card p-6 shadow-sm">
+      <section className="rounded-xl border border-border bg-card p-6">
         <h2 className="font-display text-xl font-bold">Contact Information</h2>
         <p className="mb-6 mt-1 text-sm text-muted-foreground">
           Displayed in the site footer and contact page. Leave fields blank to hide them.
@@ -75,7 +75,7 @@ export function SettingsForm({ settings }: { settings: PublicSettings }) {
         </form>
       </section>
 
-      <section className="rounded-xl border border-border bg-card p-6 shadow-sm">
+      <section className="rounded-xl border border-border bg-card p-6">
         <h2 className="font-display text-xl font-bold">Social Links</h2>
         <p className="mb-6 mt-1 text-sm text-muted-foreground">
           Full URLs to your social profiles. Leave blank to hide the icon.
@@ -123,7 +123,7 @@ export function SettingsForm({ settings }: { settings: PublicSettings }) {
         </form>
       </section>
 
-      <section className="rounded-xl border border-border bg-card p-6 shadow-sm">
+      <section className="rounded-xl border border-border bg-card p-6">
         <h2 className="font-display text-xl font-bold">Announcement Banner</h2>
         <p className="mb-6 mt-1 text-sm text-muted-foreground">
           A dismissible banner shown at the very top of all public pages.

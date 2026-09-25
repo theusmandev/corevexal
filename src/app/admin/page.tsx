@@ -79,7 +79,7 @@ export default async function AdminDashboardPage() {
               Could not load this figure
             </p>
           ) : (
-            <p className="mt-2 text-4xl font-display font-bold">{totalCount || 0}</p>
+            <p className="mt-2 text-4xl font-display font-bold">{totalCount ?? 0}</p>
           )}
         </Link>
         <Link
@@ -92,7 +92,7 @@ export default async function AdminDashboardPage() {
               Could not load this figure
             </p>
           ) : (
-            <p className="mt-2 text-4xl font-display font-bold text-primary">{newCount || 0}</p>
+            <p className="mt-2 text-4xl font-display font-bold text-primary">{newCount ?? 0}</p>
           )}
         </Link>
         <Link
@@ -106,7 +106,7 @@ export default async function AdminDashboardPage() {
             </p>
           ) : (
             <p className="mt-2 text-4xl font-display font-bold text-amber-500">
-              {inProgressCount || 0}
+              {inProgressCount ?? 0}
             </p>
           )}
         </Link>
@@ -121,7 +121,7 @@ export default async function AdminDashboardPage() {
             </p>
           ) : (
             <p className="mt-2 text-4xl font-display font-bold text-muted-foreground">
-              {completedCount || 0}
+              {completedCount ?? 0}
             </p>
           )}
         </Link>
@@ -214,10 +214,10 @@ export default async function AdminDashboardPage() {
                 <span className="font-bold text-primary">
                   {recentError ? (
                     <span className="text-destructive font-semibold" role="alert">
-                      Could not load
+                      Error
                     </span>
                   ) : (
-                    <span className="font-bold text-primary">{recentCount || 0}</span>
+                    <span className="font-bold text-primary">{recentCount ?? 0}</span>
                   )}
                 </span>
               </div>

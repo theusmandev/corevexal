@@ -129,7 +129,17 @@ export default async function LeadsPage({
             </tr>
           </thead>
           <tbody>
-            {!leads || leads.length === 0 ? (
+            {error ? (
+              <tr>
+                <td
+                  colSpan={7}
+                  className="px-4 py-10 text-center text-destructive font-semibold"
+                  role="alert"
+                >
+                  Failed to load leads — please refresh or contact support.
+                </td>
+              </tr>
+            ) : !leads || leads.length === 0 ? (
               <tr>
                 <td colSpan={7} className="px-4 py-10 text-center text-muted-foreground">
                   No leads yet.

@@ -6,7 +6,16 @@ export function Brand({ inverse = false }: { inverse?: boolean }) {
 
   return (
     <Link href="/" className="group inline-flex items-center" aria-label="Corevexal home">
-      <Image src={src} alt="Corevexal" width={180} height={40} className="h-8 w-auto" priority />
+      {/* intrinsic 2048×978 viewBox — ratio 2.094:1; h-9 = 36px → w ≈ 75px */}
+      <Image
+        src={src}
+        alt="Corevexal"
+        width={2048}
+        height={978}
+        className="h-10 w-auto md:h-12"
+        priority
+        unoptimized
+      />
     </Link>
   );
 }
