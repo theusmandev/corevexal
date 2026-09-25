@@ -7,7 +7,7 @@ export function CtaBand() {
     <section className="bg-deep text-inverse">
       <div className="site-container grid gap-8 py-16 lg:grid-cols-[1fr_auto] lg:items-end lg:py-20">
         <div>
-          <p className="eyebrow">Start at the core</p>
+          <p className="eyebrow text-slate-300">Start at the core</p>
           <h2 className="mt-5 max-w-3xl font-display text-4xl font-bold sm:text-5xl">
             Build the right foundation for what comes next.
           </h2>

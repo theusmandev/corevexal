@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { Manrope, Sora } from "next/font/google";
+import { BackToTop } from "@/components/ui/back-to-top";
 import "../styles.css";
 
 const manrope = Manrope({
@@ -53,6 +54,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <BackToTop />
         </ThemeProvider>
       </body>
     </html>

@@ -93,12 +93,12 @@ export function SiteFooter({
               <div className="mt-8 space-y-4 text-sm text-inverse-muted">
                 {settings?.contactInfo?.email && (
                   <div>
-                    <a href={`mailto:${settings.contactInfo.email}`} className="hover:text-primary-text transition-colors">{settings.contactInfo.email}</a>
+                    <a href={`mailto:${settings.contactInfo.email}`} className="hover:text-orange-400 transition-colors">{settings.contactInfo.email}</a>
                   </div>
                 )}
                 {settings?.contactInfo?.phone && (
                   <div>
-                    <a href={`tel:${settings.contactInfo.phone}`} className="hover:text-primary-text transition-colors">{settings.contactInfo.phone}</a>
+                    <a href={`tel:${settings.contactInfo.phone}`} className="hover:text-orange-400 transition-colors">{settings.contactInfo.phone}</a>
                   </div>
                 )}
                 {settings?.contactInfo?.address && (
@@ -107,25 +107,25 @@ export function SiteFooter({
                 {hasSocials && (
                   <div className="flex items-center gap-4 pt-2">
                     {settings?.socialLinks?.linkedin && (
-                      <a href={settings.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-primary-text transition-colors">
+                      <a href={settings.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-orange-400 transition-colors">
                         <Linkedin className="size-5" />
                         <span className="sr-only">LinkedIn</span>
                       </a>
                     )}
                     {settings?.socialLinks?.twitter && (
-                      <a href={settings.socialLinks.twitter} target="_blank" rel="noopener noreferrer" className="hover:text-primary-text transition-colors">
+                      <a href={settings.socialLinks.twitter} target="_blank" rel="noopener noreferrer" className="hover:text-orange-400 transition-colors">
                         <Twitter className="size-5" />
                         <span className="sr-only">Twitter</span>
                       </a>
                     )}
                     {settings?.socialLinks?.instagram && (
-                      <a href={settings.socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-primary-text transition-colors">
+                      <a href={settings.socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-orange-400 transition-colors">
                         <Instagram className="size-5" />
                         <span className="sr-only">Instagram</span>
                       </a>
                     )}
                     {settings?.socialLinks?.facebook && (
-                      <a href={settings.socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="hover:text-primary-text transition-colors">
+                      <a href={settings.socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="hover:text-orange-400 transition-colors">
                         <Facebook className="size-5" />
                         <span className="sr-only">Facebook</span>
                       </a>
@@ -134,7 +134,7 @@ export function SiteFooter({
                 )}
               </div>
             )}
-            <p className="mt-8 text-xs font-bold uppercase text-primary-text">
+            <p className="mt-8 text-xs font-bold uppercase text-slate-300">
               Where everything starts at the core
             </p>
           </div>
@@ -151,7 +151,7 @@ export function SiteFooter({
                           href={href}
                           target={isExternal ? "_blank" : undefined}
                           rel={isExternal ? "noopener noreferrer" : undefined}
-                          className="inline-flex items-center gap-1 text-sm text-inverse-muted transition-colors hover:text-primary-text"
+                          className="inline-flex items-center gap-1 text-sm text-inverse-muted transition-colors hover:text-orange-400"
                         >
                           {label}
                           {isExternal && <ArrowUpRight className="size-3" />}

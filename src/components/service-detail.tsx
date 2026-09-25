@@ -24,7 +24,7 @@ export async function ServiceDetail({ service }: { service: PublishedService }) 
       <section className="bg-deep text-inverse">
         <div className="site-container grid min-h-[620px] items-center gap-12 py-20 lg:grid-cols-[1fr_.8fr]">
           <div>
-            <p className="eyebrow">Corevexal services</p>
+            <p className="eyebrow text-slate-300">Corevexal services</p>
             <h1 className="mt-6 max-w-3xl font-display text-5xl font-bold leading-[1.03] sm:text-6xl">
               {service.title}
             </h1>
@@ -43,7 +43,7 @@ export async function ServiceDetail({ service }: { service: PublishedService }) 
             </div>
           </div>
           <div className="core-diagram">
-            <Icon className="size-16 text-primary-text" />
+            <Icon className="size-16 text-orange-400" />
             <span />
             <p>{service.category_id}</p>
             <span />

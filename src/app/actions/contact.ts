@@ -15,10 +15,7 @@ const leadSchema = z.object({
   email: z.string().trim().email("Invalid email address").max(180, "Email is too long"),
   phone: z.string().trim().max(40, "Phone is too long").optional(),
   country: z.enum(COUNTRY_CODES, { errorMap: () => ({ message: "Invalid country selected" }) }),
-  companyStatus: z.string().trim().min(2, "Status is required").max(100),
-  companyName: z.string().trim().max(160, "Company name is too long").optional(),
   serviceRequested: z.string().trim().min(2, "Service is required").max(100),
-  businessType: z.string().trim().min(2, "Business type is required").max(120),
   message: z
     .string()
     .trim()
@@ -94,10 +91,7 @@ export async function submitContact(
       email: validatedData.data.email,
       phone: validatedData.data.phone || null,
       country: validatedData.data.country,
-      company_status: validatedData.data.companyStatus,
-      company_name: validatedData.data.companyName || null,
       service_requested: validatedData.data.serviceRequested,
-      business_type: validatedData.data.businessType,
       message: validatedData.data.message,
     });
 

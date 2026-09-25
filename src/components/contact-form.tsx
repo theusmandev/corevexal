@@ -1,17 +1,14 @@
 "use client";
 
-import { useActionState, useMemo } from "react";
-import { CheckCircle2, Loader2 } from "lucide-react";
+import { useActionState, useMemo, useState } from "react";
+import { CheckCircle2, Loader2, Check, ChevronsUpDown } from "lucide-react";
 import { submitContact } from "@/app/actions/contact";
 import { Button } from "./ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "./ui/command";
+import { cn } from "@/lib/utils";
 import { COUNTRY_CODES, getCountryName } from "@/lib/countries";
 
-const statuses = [
-  "I haven't formed my company yet",
-  "I already have a company",
-  "I am expanding an existing business",
-  "I'm not sure",
-];
 const options = [
   "UK LTD Formation",
   "US LLC Formation",
@@ -61,35 +58,24 @@ export function ContactForm() {
         </label>
       </div>
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field label="Full Name" name="fullName" required error={state.fieldErrors?.["fullName"]} />
+        <Field label="Full Name" name="fullName" required placeholder="e.g. John Smith" autoComplete="name" error={state.fieldErrors?.["fullName"]} />
         <Field
           label="Email"
           name="email"
           type="email"
           required
+          placeholder="you@company.com"
+          autoComplete="email"
           error={state.fieldErrors?.["email"]}
         />
-        <Field label="Phone" name="phone" type="tel" error={state.fieldErrors?.["phone"]} />
+        <Field label="Phone" name="phone" type="tel" placeholder="+1 555 000 0000" autoComplete="tel" error={state.fieldErrors?.["phone"]} />
         <CountrySelectField
           label="Country"
           name="country"
           options={countryOptions}
           error={state.fieldErrors?.["country"]}
         />
-        <Field label="Company Name" name="companyName" error={state.fieldErrors?.["companyName"]} />
-        <Field
-          label="Business Type"
-          name="businessType"
-          required
-          error={state.fieldErrors?.["businessType"]}
-        />
       </div>
-      <SelectField
-        label="Company Status"
-        name="companyStatus"
-        options={statuses}
-        error={state.fieldErrors?.["companyStatus"]}
-      />
       <SelectField
         label="Service Needed"
         name="serviceRequested"
@@ -142,12 +128,16 @@ function Field({
   type = "text",
   required = false,
   error,
+  placeholder,
+  autoComplete,
 }: {
   label: string;
   name: string;
   type?: string;
   required?: boolean;
   error?: string[] | undefined;
+  placeholder?: string;
+  autoComplete?: string;
 }) {
   return (
     <label className="grid gap-2 text-sm font-semibold">
@@ -156,6 +146,8 @@ function Field({
         name={name}
         type={type}
         required={required}
+        placeholder={placeholder}
+        autoComplete={autoComplete}
         className={`h-12 border bg-background px-4 font-normal focus:border-primary ${error ? "border-destructive" : "border-input"}`}
       />
       {error && <span className="text-xs text-destructive">{error[0]}</span>}
@@ -206,26 +198,58 @@ export function CountrySelectField({
   options: { code: string; name: string }[];
   error?: string[] | undefined;
 }) {
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState("");
+
   return (
-    <label className="grid gap-2 text-sm font-semibold">
-      {label}
-      <select
-        name={name}
-        required
-        autoComplete="country"
-        defaultValue=""
-        className={`h-12 border bg-background px-4 font-normal focus:border-primary ${error ? "border-destructive" : "border-input"}`}
-      >
-        <option value="" disabled>
-          Select an option
-        </option>
-        {options.map((opt) => (
-          <option key={opt.code} value={opt.code}>
-            {opt.name}
-          </option>
-        ))}
-      </select>
+    <div className="grid gap-2 text-sm font-semibold">
+      <label>{label}</label>
+      <input type="hidden" name={name} value={value} required autoComplete="country" />
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            className={`h-12 w-full justify-between border bg-background px-4 font-normal rounded-none shadow-none focus:border-primary hover:bg-background ${error ? "border-destructive" : "border-input"} ${!value ? "text-muted-foreground" : ""}`}
+          >
+            {value
+              ? options.find((opt) => opt.code === value)?.name
+              : "Select country..."}
+            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-[--radix-popover-trigger-width] p-0 rounded-none shadow-none border-input" align="start">
+          <Command>
+            <CommandInput placeholder="Search country..." className="border-none focus:ring-0" />
+            <CommandList>
+              <CommandEmpty>No country found.</CommandEmpty>
+              <CommandGroup>
+                {options.map((opt) => (
+                  <CommandItem
+                    key={opt.code}
+                    value={opt.name}
+                    onSelect={() => {
+                      setValue(opt.code);
+                      setOpen(false);
+                    }}
+                    className="cursor-pointer rounded-none data-[selected=true]:bg-primary data-[selected=true]:text-primary-foreground"
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        value === opt.code ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                    {opt.name}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
       {error && <span className="text-xs text-destructive">{error[0]}</span>}
-    </label>
+    </div>
   );
 }
