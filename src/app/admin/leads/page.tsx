@@ -46,7 +46,7 @@ export default async function LeadsPage({
   if (safeSearch) {
     const postgrestVal = `"%${safeSearch}%"`;
     query = query.or(
-      `full_name.ilike.${postgrestVal},email.ilike.${postgrestVal},company_name.ilike.${postgrestVal}`,
+      `full_name.ilike.${postgrestVal},email.ilike.${postgrestVal}`,
     );
   }
 

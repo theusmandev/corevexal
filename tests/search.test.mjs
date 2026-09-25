@@ -64,7 +64,7 @@ test("Supabase query runner with anon key", async () => {
     const { data, error } = await supabase
       .from("leads")
       .select("id")
-      .or(`full_name.ilike.${term},email.ilike.${term},company_name.ilike.${term}`)
+      .or(`full_name.ilike.${term},email.ilike.${term}`)
       .limit(1);
 
     assert.ifError(error);

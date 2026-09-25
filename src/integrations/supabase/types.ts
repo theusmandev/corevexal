@@ -168,9 +168,6 @@ export type Database = {
       };
       leads: {
         Row: {
-          business_type: string;
-          company_name: string | null;
-          company_status: string;
           country: string;
           created_at: string;
           email: string;
@@ -184,9 +181,6 @@ export type Database = {
           updated_at: string;
         };
         Insert: {
-          business_type: string;
-          company_name?: string | null;
-          company_status: string;
           country: string;
           created_at?: string;
           email: string;
@@ -200,9 +194,6 @@ export type Database = {
           updated_at?: string;
         };
         Update: {
-          business_type?: string;
-          company_name?: string | null;
-          company_status?: string;
           country?: string;
           created_at?: string;
           email?: string;
