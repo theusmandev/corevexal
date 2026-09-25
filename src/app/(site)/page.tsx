@@ -113,36 +113,38 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="section">
-        <div className="site-container grid gap-12 lg:grid-cols-2">
-          <div>
-            <p className="eyebrow">Financial infrastructure</p>
-            <h2 className="section-title mt-5">Build the systems behind the business.</h2>
-            <p className="mt-6 max-w-xl leading-7 text-muted-foreground">
-              Prepare documentation, compare account structures, and plan multi-currency operations
-              without promises that belong to providers.
-            </p>
-            <Button asChild variant="outline" className="mt-8">
-              <Link href="/services/business-banking">
-                Explore Banking <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
+      {false && (
+        <section className="section">
+          <div className="site-container grid gap-12 lg:grid-cols-2">
+            <div>
+              <p className="eyebrow">Financial infrastructure</p>
+              <h2 className="section-title mt-5">Build the systems behind the business.</h2>
+              <p className="mt-6 max-w-xl leading-7 text-muted-foreground">
+                Prepare documentation, compare account structures, and plan multi-currency operations
+                without promises that belong to providers.
+              </p>
+              <Button asChild variant="outline" className="mt-8">
+                <Link href="/services/business-banking">
+                  Explore Banking <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+            <div className="grid gap-px bg-border">
+              {[
+                "Business bank accounts",
+                "Multi-currency accounts",
+                "Application preparation",
+                "Account workflow planning",
+              ].map((x, i) => (
+                <div className="flex items-center justify-between bg-surface p-6" key={x}>
+                  <span className="font-semibold">{x}</span>
+                  <span className="font-mono text-xs text-primary-text">0{i + 1}</span>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="grid gap-px bg-border">
-            {[
-              "Business bank accounts",
-              "Multi-currency accounts",
-              "Application preparation",
-              "Account workflow planning",
-            ].map((x, i) => (
-              <div className="flex items-center justify-between bg-surface p-6" key={x}>
-                <span className="font-semibold">{x}</span>
-                <span className="font-mono text-xs text-primary-text">0{i + 1}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <section className="section bg-surface">
         <div className="site-container">
