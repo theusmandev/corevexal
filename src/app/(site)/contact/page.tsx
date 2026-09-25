@@ -49,7 +49,17 @@ export default async function ContactPage() {
                 {contactInfo.phone && (
                   <div>
                     <strong className="block text-xs uppercase text-muted-foreground">Phone</strong>
-                    <a href={`tel:${contactInfo.phone}`} className="font-medium hover:text-primary transition-colors">{contactInfo.phone}</a>
+                    <div className="flex flex-col gap-1 items-start mt-1">
+                      <a href={`tel:${contactInfo.phone}`} className="font-medium hover:text-primary transition-colors">{contactInfo.phone}</a>
+                      <a 
+                        href={`https://wa.me/${contactInfo.phone.replace(/\D/g, '')}`} 
+                        className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-primary transition-colors"
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                      >
+                        Message us on WhatsApp &rarr;
+                      </a>
+                    </div>
                   </div>
                 )}
                 {contactInfo.address && (
