@@ -39,20 +39,20 @@ export default async function Home() {
   return (
     <main>
       <section className="overflow-hidden bg-background">
-        <div className="site-container grid min-h-[calc(100vh-5rem)] items-center gap-12 py-16 lg:grid-cols-[1.05fr_.75fr] lg:py-20">
+        <div className="site-container grid min-h-[calc(100vh-5rem)] items-center gap-10 pt-6 pb-16 lg:grid-cols-[1.05fr_.75fr] lg:pt-10 lg:pb-20">
           <div>
             <p className="eyebrow">
               Business formation • Financial infrastructure • Digital solutions
             </p>
-            <h1 className="mt-7 max-w-4xl text-balance font-display text-5xl font-bold leading-[.98] sm:text-6xl lg:text-7xl xl:text-8xl">
+            <h1 className="mt-5 max-w-4xl text-balance font-display text-4xl font-bold leading-[1.05] sm:text-5xl lg:text-6xl xl:text-7xl">
               Build Your Business <span className="text-primary-text">From the Core.</span>
             </h1>
-            <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground">
+            <p className="mt-5 max-w-2xl text-lg leading-8 text-muted-foreground">
               From company formation to business banking, payment infrastructure, and digital
               solutions — Corevexal helps you establish the foundations for your next stage of
               growth.
             </p>
-            <div className="mt-9 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-wrap gap-3">
               <Button asChild size="lg">
                 <Link href="/contact">
                   Get Started <ArrowRight className="ml-2 h-4 w-4" />

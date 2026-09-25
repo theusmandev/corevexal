@@ -53,12 +53,12 @@ export function HeroVisual() {
   return (
     <div
       ref={containerRef}
-      className="flex flex-col items-center justify-center gap-10 md:gap-14 w-full max-w-lg mx-auto"
+      className="flex flex-col items-center justify-center gap-2 md:gap-4 w-full max-w-lg mx-auto"
       aria-label="Brand mark animation alongside five pillars: Business Formation, Financial Infrastructure, Payment Setup, Digital Solutions, Scalable Growth."
     >
       {/* Brand mark SVG — paths sourced directly from public/brand/mark.svg viewBox 0 0 2048 1917 */}
       <div
-        className="relative flex-shrink-0 w-[200px] h-[187px] sm:w-[280px] sm:h-[262px]"
+        className="relative flex-shrink-0 w-[120px] h-[112px] sm:w-[160px] sm:h-[150px] lg:w-[180px] lg:h-[168px]"
         aria-hidden="true"
       >
         <svg
@@ -112,7 +112,7 @@ export function HeroVisual() {
       </div>
 
       {/* Pillar labels */}
-      <ol className="flex flex-col gap-4 sm:gap-5 list-none p-0 m-0 w-full max-w-[280px]">
+      <ol className="flex flex-col gap-1 sm:gap-2 list-none p-0 m-0 w-full max-w-[260px]">
         {layers.map((label, i) => (
           <li
             key={label}
@@ -123,10 +123,10 @@ export function HeroVisual() {
               transition: `opacity 0.4s ease-out ${1.2 + i * 0.08}s, transform 0.4s ease-out ${1.2 + i * 0.08}s`,
             }}
           >
-            <span className="text-sm sm:text-base text-primary-text font-bold shrink-0">
+            <span className="text-xs sm:text-sm text-primary-text font-bold shrink-0">
               0{i + 1}
             </span>
-            <span className="font-display font-semibold text-foreground text-base sm:text-lg md:text-xl break-words whitespace-normal">
+            <span className="font-display font-semibold text-foreground text-xs sm:text-sm break-words whitespace-normal">
               {label}
             </span>
           </li>
