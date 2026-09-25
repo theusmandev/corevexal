@@ -39,20 +39,20 @@ export default async function Home() {
   return (
     <main>
       <section className="overflow-hidden bg-background">
-        <div className="site-container grid min-h-[calc(100vh-5rem)] items-center gap-10 pt-6 pb-16 lg:grid-cols-[1.05fr_.75fr] lg:pt-10 lg:pb-20">
+        <div className="site-container grid min-h-[calc(100vh-5rem)] items-center gap-16 pt-6 pb-16 lg:gap-10 lg:grid-cols-[1.05fr_.75fr] lg:pt-10 lg:pb-20">
           <div>
             <p className="eyebrow">
               Business formation • Financial infrastructure • Digital solutions
             </p>
-            <h1 className="mt-5 max-w-4xl text-balance font-display text-4xl font-bold leading-[1.05] sm:text-5xl lg:text-6xl xl:text-7xl">
+            <h1 className="mt-5 max-w-4xl text-balance font-display text-5xl font-bold leading-[1.05] lg:text-6xl xl:text-7xl">
               Build Your Business <span className="text-primary-text">From the Core.</span>
             </h1>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-muted-foreground">
+            <p className="mt-5 max-w-2xl text-[1.35rem] sm:text-lg leading-8 text-muted-foreground">
               From company formation to business banking, payment infrastructure, and digital
               solutions — Corevexal helps you establish the foundations for your next stage of
               growth.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-8 mb-24 flex flex-wrap gap-3 lg:mb-0">
               <Button asChild size="lg">
                 <Link href="/contact">
                   Get Started <ArrowRight className="ml-2 h-4 w-4" />
@@ -86,7 +86,7 @@ export default async function Home() {
 
       <section className="section bg-deep text-inverse">
         <div className="site-container">
-          <p className="eyebrow">Business formation</p>
+          <p className="eyebrow text-slate-300">Business formation</p>
           <div className="mt-5 grid gap-6 lg:grid-cols-2">
             <h2 className="section-title">Form Your Business With Confidence.</h2>
             <p className="max-w-xl leading-7 text-inverse-muted">
@@ -99,7 +99,7 @@ export default async function Home() {
               const Icon = getIcon(service.icon || "");
               return (
                 <div className="bg-deep p-6" key={service.slug}>
-                  <Icon className="text-primary-text" />
+                  <Icon className="text-orange-400" />
                   <h3 className="mt-8 font-display text-lg font-bold">{service.title}</h3>
                 </div>
               );
@@ -170,7 +170,7 @@ export default async function Home() {
 
       <section className="section bg-deep text-inverse">
         <div className="site-container">
-          <p className="eyebrow">From formation to growth</p>
+          <p className="eyebrow text-slate-300">From formation to growth</p>
           <h2 className="section-title mt-5">A business journey with a stronger core.</h2>
           <div className="mt-12 grid lg:grid-cols-7">
             {journey.map((x, i) => (
@@ -178,10 +178,10 @@ export default async function Home() {
                 className="relative border-l border-inverse/20 px-5 py-6 lg:min-h-48 lg:border-l-0 lg:border-t"
                 key={x}
               >
-                <span className="font-mono text-xs text-primary-text">0{i + 1}</span>
+                <span className="font-mono text-xs text-orange-400">0{i + 1}</span>
                 <h3 className="mt-10 text-sm font-bold uppercase">{x}</h3>
                 {i < journey.length - 1 && (
-                  <ArrowRight className="absolute -right-3 -top-3 hidden size-5 bg-deep text-primary-text lg:block" />
+                  <ArrowRight className="absolute -right-3 -top-3 hidden size-5 bg-deep text-orange-400 lg:block" />
                 )}
               </div>
             ))}
