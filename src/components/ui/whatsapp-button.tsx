@@ -39,9 +39,9 @@ export function WhatsAppButton({ phone }: { phone?: string }) {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat with us on WhatsApp"
-        className="inline-flex items-center justify-center size-11 rounded-full shadow-none bg-[#25D366] text-white transition-colors duration-200 hover:bg-[#1DA851] active:scale-95"
+        className="inline-flex items-center justify-center size-10 rounded-full shadow-none bg-[#25D366] text-white transition-colors duration-200 hover:bg-[#1DA851] active:scale-95"
       >
-        <FaWhatsapp className="size-6" />
+        <FaWhatsapp className="size-5" />
       </a>
     </div>
   );
