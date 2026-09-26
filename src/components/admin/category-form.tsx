@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { checkCategorySlugAvailable } from "@/app/actions/categories";
 
 function slugify(text: string): string {
@@ -23,10 +24,17 @@ type CategoryFormProps = {
     display_order: number;
     status: string;
   };
-  action: (formData: FormData) => Promise<{ error?: string; id?: string; success?: boolean }>;
+  action: (
+    formData: FormData,
+  ) => Promise<{ error?: string; id?: string; success?: boolean; cascadedServices?: string[] }>;
+  publishedServiceCount?: number;
 };
 
-export function CategoryForm({ initialData, action }: CategoryFormProps) {
+export function CategoryForm({
+  initialData,
+  action,
+  publishedServiceCount = 0,
+}: CategoryFormProps) {
   const isEditing = !!initialData;
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -73,6 +81,23 @@ export function CategoryForm({ initialData, action }: CategoryFormProps) {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (slugError) return;
+
+    // Warning for cascading drafts
+    if (
+      isEditing &&
+      initialData?.status === "published" &&
+      status === "draft" &&
+      publishedServiceCount > 0
+    ) {
+      const confirmed = window.confirm(
+        `This category has ${publishedServiceCount} published service(s). Setting it to draft will also set all of them to draft, hiding them from the public site. Continue?`,
+      );
+      if (!confirmed) {
+        setStatus("published");
+        return;
+      }
+    }
+
     const fd = new FormData(e.currentTarget);
     setFormError(null);
     startTransition(async () => {
@@ -80,6 +105,11 @@ export function CategoryForm({ initialData, action }: CategoryFormProps) {
       if (result.error) {
         setFormError(result.error);
       } else {
+        if (result.cascadedServices && result.cascadedServices.length > 0) {
+          toast.success(
+            `Category set to draft. ${result.cascadedServices.length} service(s) were also set to draft: ${result.cascadedServices.join(", ")}`,
+          );
+        }
         router.push("/admin/categories");
         router.refresh();
       }

@@ -130,6 +130,29 @@ export async function updateCategory(id: string, formData: FormData) {
     };
   }
 
+  // If changing status from published to draft, we need to cascade
+  let cascadedServices: string[] = [];
+  if (status === "draft") {
+    // Check if there are published services
+    const { data: pubServices } = await supabase
+      .from("services")
+      .select("id, title")
+      .eq("category_id", id)
+      .eq("status", "published");
+
+    if (pubServices && pubServices.length > 0) {
+      cascadedServices = pubServices.map((s) => s.title);
+      // Update them to draft
+      await supabase
+        .from("services")
+        .update({ status: "draft", updated_at: new Date().toISOString() })
+        .in(
+          "id",
+          pubServices.map((s) => s.id),
+        );
+    }
+  }
+
   const { error } = await supabase
     .from("service_categories")
     .update({
@@ -146,9 +169,26 @@ export async function updateCategory(id: string, formData: FormData) {
 
   revalidatePath("/admin/categories");
   revalidatePath(`/admin/categories/${id}`);
+  revalidatePath("/admin/services");
   revalidatePath("/services");
+  revalidatePath("/contact");
   revalidatePath("/sitemap.xml");
-  return { success: true };
+
+  // Re-fetch slugs for revalidation if needed
+  if (cascadedServices.length > 0) {
+    const { data: pubServices } = await supabase
+      .from("services")
+      .select("slug")
+      .eq("category_id", id);
+
+    if (pubServices) {
+      for (const svc of pubServices) {
+        revalidatePath(`/services/${svc.slug}`);
+      }
+    }
+  }
+
+  return { success: true, cascadedServices };
 }
 
 // ---------------------------------------------------------------------------

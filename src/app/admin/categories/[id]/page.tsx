@@ -27,6 +27,14 @@ export default async function EditCategoryPage({ params }: Props) {
 
   const boundUpdate = updateCategory.bind(null, id);
 
+  const { count: pubCount } = await supabase
+    .from("services")
+    .select("id", { count: "exact", head: true })
+    .eq("category_id", id)
+    .eq("status", "published");
+
+  const publishedServiceCount = pubCount ?? 0;
+
   return (
     <div className="site-container py-10">
       <div className="mb-8 flex items-start justify-between">
@@ -47,6 +55,7 @@ export default async function EditCategoryPage({ params }: Props) {
           display_order: cat.display_order,
           status: cat.status,
         }}
+        publishedServiceCount={publishedServiceCount}
         action={boundUpdate}
       />
     </div>
