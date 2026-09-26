@@ -42,7 +42,8 @@ export function AnnouncementBanner({ banner }: { banner?: BannerType }) {
               href={banner.link_url}
               className="group ml-2 inline-flex items-center font-bold hover:underline"
             >
-              {banner.link_text} <ArrowRight className="ml-1 size-4 transition-transform group-hover:translate-x-0.5" />
+              {banner.link_text}{" "}
+              <ArrowRight className="ml-1 size-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
           )}
         </p>

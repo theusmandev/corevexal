@@ -74,7 +74,7 @@ export default async function CategoryOrServicePage({ params }: Props) {
         />
         <section className="section">
           {category.services && category.services.length > 0 ? (
-            <div className="site-container grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-3">
+            <div className="site-container grid gap-px bg-border grid-cols-[repeat(auto-fit,minmax(300px,1fr))]">
               {category.services.map((service) => {
                 const Icon = getIcon(service.icon || "");
                 return (

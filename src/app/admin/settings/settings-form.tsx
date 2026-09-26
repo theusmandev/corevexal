@@ -142,7 +142,9 @@ export function SettingsForm({ settings }: { settings: PublicSettings }) {
             </label>
           </div>
           <div>
-            <label className="mb-2 block text-sm font-medium">Announcement Text (max 200 chars)</label>
+            <label className="mb-2 block text-sm font-medium">
+              Announcement Text (max 200 chars)
+            </label>
             <input
               type="text"
               name="text"

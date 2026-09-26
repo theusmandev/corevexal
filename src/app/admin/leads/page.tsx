@@ -45,9 +45,7 @@ export default async function LeadsPage({
 
   if (safeSearch) {
     const postgrestVal = `"%${safeSearch}%"`;
-    query = query.or(
-      `full_name.ilike.${postgrestVal},email.ilike.${postgrestVal}`,
-    );
+    query = query.or(`full_name.ilike.${postgrestVal},email.ilike.${postgrestVal}`);
   }
 
   const from = (page - 1) * pageSize;

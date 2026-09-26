@@ -8,60 +8,60 @@
 
 ### 1.1 Public Site Routes
 
-| Route | File | Rendering | revalidate |
-|-------|------|-----------|------------|
-| / | (site)/page.tsx | ISR | 60 s |
-| /about | (site)/about/page.tsx | ISR | - |
-| /contact | (site)/contact/page.tsx | Dynamic | - |
-| /faq | (site)/faq/page.tsx | ISR | - |
-| /solutions | (site)/solutions/page.tsx | ISR | - |
-| /resources | (site)/resources/page.tsx | ISR | - |
-| /services | (site)/services/page.tsx | ISR | 60 s |
-| /services/[slug] | (site)/services/[slug]/page.tsx | ISR + generateStaticParams | 60 s |
-| /legal/privacy | (site)/legal/privacy/page.tsx | Static | - |
-| /legal/terms | (site)/legal/terms/page.tsx | Static | - |
-| /legal/cookies | (site)/legal/cookies/page.tsx | Static | - |
-| /legal/disclaimer | (site)/legal/disclaimer/page.tsx | Static | - |
+| Route             | File                             | Rendering                  | revalidate |
+| ----------------- | -------------------------------- | -------------------------- | ---------- |
+| /                 | (site)/page.tsx                  | ISR                        | 60 s       |
+| /about            | (site)/about/page.tsx            | ISR                        | -          |
+| /contact          | (site)/contact/page.tsx          | Dynamic                    | -          |
+| /faq              | (site)/faq/page.tsx              | ISR                        | -          |
+| /solutions        | (site)/solutions/page.tsx        | ISR                        | -          |
+| /resources        | (site)/resources/page.tsx        | ISR                        | -          |
+| /services         | (site)/services/page.tsx         | ISR                        | 60 s       |
+| /services/[slug]  | (site)/services/[slug]/page.tsx  | ISR + generateStaticParams | 60 s       |
+| /legal/privacy    | (site)/legal/privacy/page.tsx    | Static                     | -          |
+| /legal/terms      | (site)/legal/terms/page.tsx      | Static                     | -          |
+| /legal/cookies    | (site)/legal/cookies/page.tsx    | Static                     | -          |
+| /legal/disclaimer | (site)/legal/disclaimer/page.tsx | Static                     | -          |
 
 ### 1.2 Admin Routes (robots: noindex, nofollow)
 
-| Route | Description |
-|-------|-------------|
-| /admin | Dashboard — real-time lead counts + status breakdown |
-| /admin/leads | Paginated leads table with search + status filter |
-| /admin/leads/[id] | Individual lead detail + status update |
-| /admin/categories | Category list |
-| /admin/categories/new | Create category |
-| /admin/categories/[id] | Edit category |
-| /admin/services | Service list |
-| /admin/services/new | Create service |
-| /admin/services/[id] | Edit service |
-| /admin/preview/[slug] | Live preview of draft service page |
-| /admin/settings | Contact info, social links, announcement banner |
+| Route                  | Description                                          |
+| ---------------------- | ---------------------------------------------------- |
+| /admin                 | Dashboard — real-time lead counts + status breakdown |
+| /admin/leads           | Paginated leads table with search + status filter    |
+| /admin/leads/[id]      | Individual lead detail + status update               |
+| /admin/categories      | Category list                                        |
+| /admin/categories/new  | Create category                                      |
+| /admin/categories/[id] | Edit category                                        |
+| /admin/services        | Service list                                         |
+| /admin/services/new    | Create service                                       |
+| /admin/services/[id]   | Edit service                                         |
+| /admin/preview/[slug]  | Live preview of draft service page                   |
+| /admin/settings        | Contact info, social links, announcement banner      |
 
 ### 1.3 Auth & Portal Routes
 
-| Route | Description |
-|-------|-------------|
-| /login | Supabase Auth email/password sign-in |
-| /portal | Client portal (authenticated) |
+| Route   | Description                          |
+| ------- | ------------------------------------ |
+| /login  | Supabase Auth email/password sign-in |
+| /portal | Client portal (authenticated)        |
 
 ### 1.4 API Routes
 
-| Route | Method | Description |
-|-------|--------|-------------|
-| /api/contact | POST | Contact form handler — inserts to Supabase leads |
+| Route        | Method | Description                                      |
+| ------------ | ------ | ------------------------------------------------ |
+| /api/contact | POST   | Contact form handler — inserts to Supabase leads |
 
 ### 1.5 Special Files
 
-| File | Purpose |
-|------|---------|
-| src/app/sitemap.ts | Dynamic XML sitemap |
-| public/robots.txt | Search engine crawl directives |
-| src/app/icon.svg | Brand mark favicon (SVG w/ dark-mode media query) |
-| src/app/apple-icon.tsx | Apple Touch Icon — 180x180 PNG via ImageResponse |
-| src/app/opengraph-image.png | Static OG image |
-| src/app/twitter-image.png | Static Twitter card image |
+| File                        | Purpose                                           |
+| --------------------------- | ------------------------------------------------- |
+| src/app/sitemap.ts          | Dynamic XML sitemap                               |
+| public/robots.txt           | Search engine crawl directives                    |
+| src/app/icon.svg            | Brand mark favicon (SVG w/ dark-mode media query) |
+| src/app/apple-icon.tsx      | Apple Touch Icon — 180x180 PNG via ImageResponse  |
+| src/app/opengraph-image.png | Static OG image                                   |
+| src/app/twitter-image.png   | Static Twitter card image                         |
 
 ---
 
@@ -74,20 +74,20 @@ title: "Corevexal | Business Formation & Financial Solutions"
 description: "Corevexal helps entrepreneurs and businesses with company formation, business banking guidance, payment platform setup, and digital solutions."
 
 JSON-LD Organisation schema is also injected:
-  @type: Organization
-  name: Corevexal
-  url: https://corevexal.com
-  logo: https://corevexal.com/brand/mark.svg
+@type: Organization
+name: Corevexal
+url: https://corevexal.com
+logo: https://corevexal.com/brand/mark.svg
 
 ### 2.2 Per-Page Metadata
 
-| Page | Title Pattern | Notes |
-|------|--------------|-------|
-| Home / | Corevexal | Business Formation & Financial Solutions | Root default |
-| /services/[slug] | {service.title} | Corevexal | meta_description from DB |
-| About / Contact / FAQ | Page-specific | - |
-| Legal pages | {Page} Policy | Corevexal | Static |
-| Admin pages | - | robots: noindex, nofollow |
+| Page                  | Title Pattern   | Notes                                    |
+| --------------------- | --------------- | ---------------------------------------- |
+| Home /                | Corevexal       | Business Formation & Financial Solutions | Root default             |
+| /services/[slug]      | {service.title} | Corevexal                                | meta_description from DB |
+| About / Contact / FAQ | Page-specific   | -                                        |
+| Legal pages           | {Page} Policy   | Corevexal                                | Static                   |
+| Admin pages           | -               | robots: noindex, nofollow                |
 
 ### 2.3 Sitemap Coverage
 
@@ -168,12 +168,12 @@ JSON-LD Organisation schema is also injected:
 
 ## 4. Known Pending / Out of Scope
 
-| Item | Status |
-|------|--------|
-| Email notifications on new lead | Not implemented (SMTP not configured) |
-| Service ordering (drag-and-drop) | Not implemented |
-| Blog / Resources content | Static placeholder page only |
-| Multi-language (i18n) | Not in scope |
+| Item                             | Status                                |
+| -------------------------------- | ------------------------------------- |
+| Email notifications on new lead  | Not implemented (SMTP not configured) |
+| Service ordering (drag-and-drop) | Not implemented                       |
+| Blog / Resources content         | Static placeholder page only          |
+| Multi-language (i18n)            | Not in scope                          |
 
 ---
 

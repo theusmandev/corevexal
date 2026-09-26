@@ -41,8 +41,12 @@ export const getPublicSettings = unstable_cache(
       const settingsMap = new Map(data.map((row) => [row.key, row.value]));
 
       return {
-        contactInfo: contactInfoSchema.catch(contactInfoSchema.parse({})).parse(settingsMap.get("contact_info") || {}),
-        socialLinks: socialLinksSchema.catch(socialLinksSchema.parse({})).parse(settingsMap.get("social_links") || {}),
+        contactInfo: contactInfoSchema
+          .catch(contactInfoSchema.parse({}))
+          .parse(settingsMap.get("contact_info") || {}),
+        socialLinks: socialLinksSchema
+          .catch(socialLinksSchema.parse({}))
+          .parse(settingsMap.get("social_links") || {}),
         announcementBanner: announcementBannerSchema
           .catch(announcementBannerSchema.parse({}))
           .parse(settingsMap.get("announcement_banner") || {}),
@@ -57,5 +61,5 @@ export const getPublicSettings = unstable_cache(
     }
   },
   ["site_settings"],
-  { tags: ["site_settings"], revalidate: 60 }
+  { tags: ["site_settings"], revalidate: 60 },
 );

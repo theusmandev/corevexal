@@ -129,7 +129,7 @@ export async function ServiceDetail({ service }: { service: PublishedService }) 
         <section className="section bg-surface">
           <div className="site-container">
             <h2 className="font-display text-3xl font-bold">Related services</h2>
-            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-8 grid gap-4 grid-cols-[repeat(auto-fit,minmax(250px,1fr))]">
               {relatedServices.map((rs) => {
                 const RSIcon = getIcon(rs.icon || "");
                 return (

@@ -2,6 +2,7 @@ import { PageHero } from "@/components/page-hero";
 import { ContactForm } from "@/components/contact-form";
 import type { Metadata } from "next";
 import { getPublicSettings } from "@/lib/data/settings";
+import { getPublishedCategories } from "@/lib/data/services";
 
 export const metadata: Metadata = {
   title: "Contact Corevexal | Start a Request",
@@ -23,6 +24,14 @@ export default async function ContactPage() {
   const { contactInfo } = await getPublicSettings();
   const hasContact = contactInfo && (contactInfo.email || contactInfo.phone || contactInfo.address);
 
+  let serviceOptions: string[] = [];
+  try {
+    const categories = await getPublishedCategories();
+    serviceOptions = categories.flatMap((cat) => cat.services.map((s) => s.title));
+  } catch (error) {
+    console.error("Failed to fetch service options:", error);
+  }
+
   return (
     <main>
       <PageHero
@@ -43,18 +52,28 @@ export default async function ContactPage() {
                 {contactInfo.email && (
                   <div>
                     <strong className="block text-xs uppercase text-muted-foreground">Email</strong>
-                    <a href={`mailto:${contactInfo.email}`} className="font-medium hover:text-primary transition-colors">{contactInfo.email}</a>
+                    <a
+                      href={`mailto:${contactInfo.email}`}
+                      className="font-medium hover:text-primary transition-colors"
+                    >
+                      {contactInfo.email}
+                    </a>
                   </div>
                 )}
                 {contactInfo.phone && (
                   <div>
                     <strong className="block text-xs uppercase text-muted-foreground">Phone</strong>
                     <div className="flex flex-col gap-1 items-start mt-1">
-                      <a href={`tel:${contactInfo.phone}`} className="font-medium hover:text-primary transition-colors">{contactInfo.phone}</a>
-                      <a 
-                        href={`https://wa.me/${contactInfo.phone.replace(/\D/g, '')}`} 
+                      <a
+                        href={`tel:${contactInfo.phone}`}
+                        className="font-medium hover:text-primary transition-colors"
+                      >
+                        {contactInfo.phone}
+                      </a>
+                      <a
+                        href={`https://wa.me/${contactInfo.phone.replace(/\D/g, "")}`}
                         className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-primary transition-colors"
-                        target="_blank" 
+                        target="_blank"
                         rel="noopener noreferrer"
                       >
                         Message us on WhatsApp &rarr;
@@ -64,7 +83,9 @@ export default async function ContactPage() {
                 )}
                 {contactInfo.address && (
                   <div>
-                    <strong className="block text-xs uppercase text-muted-foreground">Address</strong>
+                    <strong className="block text-xs uppercase text-muted-foreground">
+                      Address
+                    </strong>
                     <p className="whitespace-pre-line">{contactInfo.address}</p>
                   </div>
                 )}
@@ -75,7 +96,7 @@ export default async function ContactPage() {
               third-party eligibility or approval.
             </p>
           </aside>
-          <ContactForm />
+          <ContactForm serviceOptions={serviceOptions} />
         </div>
       </section>
     </main>

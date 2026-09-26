@@ -54,7 +54,7 @@ export default function Resources() {
               </span>
             ))}
           </div>
-          <div className="mt-10 grid gap-px bg-border md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-10 grid gap-px bg-border grid-cols-[repeat(auto-fit,minmax(300px,1fr))]">
             {topics.map((x, i) => (
               <article className="min-h-64 bg-background p-7" key={x}>
                 <BookOpen className="size-6 text-primary-text" />

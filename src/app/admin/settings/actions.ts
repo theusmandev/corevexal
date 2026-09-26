@@ -8,8 +8,11 @@ import {
   announcementBannerSchema,
 } from "@/lib/schemas/settings";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function requireAdmin(supabase: any) {
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) {
     return { error: "Unauthorized" };
   }
@@ -38,13 +41,14 @@ export async function updateContactInfo(formData: FormData) {
     return { error: "Invalid contact information." };
   }
 
-  const { error } = await supabase
-    .from("site_settings")
-    .upsert({
+  const { error } = await supabase.from("site_settings").upsert(
+    {
       key: "contact_info",
       value: validatedData.data,
       is_public: true,
-    }, { onConflict: "key" });
+    },
+    { onConflict: "key" },
+  );
 
   if (error) {
     console.error("Error updating contact info:", error);
@@ -71,13 +75,14 @@ export async function updateSocialLinks(formData: FormData) {
     return { error: "Invalid social links." };
   }
 
-  const { error } = await supabase
-    .from("site_settings")
-    .upsert({
+  const { error } = await supabase.from("site_settings").upsert(
+    {
       key: "social_links",
       value: validatedData.data,
       is_public: true,
-    }, { onConflict: "key" });
+    },
+    { onConflict: "key" },
+  );
 
   if (error) {
     console.error("Error updating social links:", error);
@@ -101,16 +106,19 @@ export async function updateAnnouncementBanner(formData: FormData) {
   });
 
   if (!validatedData.success) {
-    return { error: "Invalid announcement banner configuration. " + validatedData.error.errors[0]?.message };
+    return {
+      error: "Invalid announcement banner configuration. " + validatedData.error.errors[0]?.message,
+    };
   }
 
-  const { error } = await supabase
-    .from("site_settings")
-    .upsert({
+  const { error } = await supabase.from("site_settings").upsert(
+    {
       key: "announcement_banner",
       value: validatedData.data,
       is_public: true,
-    }, { onConflict: "key" });
+    },
+    { onConflict: "key" },
+  );
 
   if (error) {
     console.error("Error updating announcement banner:", error);

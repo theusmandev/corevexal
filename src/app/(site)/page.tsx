@@ -68,7 +68,7 @@ export default async function Home() {
       </section>
 
       <section className="border-y border-border">
-        <div className="site-container grid sm:grid-cols-2 lg:grid-cols-4">
+        <div className="site-container grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))]">
           {categories.map((c) => {
             const Icon = getCategoryIcon(c.slug);
             return (
@@ -94,7 +94,7 @@ export default async function Home() {
               documentation, and prepare the foundation for your next step.
             </p>
           </div>
-          <div className="mt-12 grid gap-px bg-inverse/15 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-12 grid gap-px bg-inverse/15 grid-cols-[repeat(auto-fit,minmax(300px,1fr))]">
             {formationServices.map((service) => {
               const Icon = getIcon(service.icon || "");
               return (
@@ -113,6 +113,7 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* eslint-disable-next-line no-constant-binary-expression */}
       {false && (
         <section className="section">
           <div className="site-container grid gap-12 lg:grid-cols-2">
@@ -120,8 +121,8 @@ export default async function Home() {
               <p className="eyebrow">Financial infrastructure</p>
               <h2 className="section-title mt-5">Build the systems behind the business.</h2>
               <p className="mt-6 max-w-xl leading-7 text-muted-foreground">
-                Prepare documentation, compare account structures, and plan multi-currency operations
-                without promises that belong to providers.
+                Prepare documentation, compare account structures, and plan multi-currency
+                operations without promises that belong to providers.
               </p>
               <Button asChild variant="outline" className="mt-8">
                 <Link href="/services/business-banking">
@@ -157,7 +158,7 @@ export default async function Home() {
               <Link href="/services/payment-platforms">Explore Payment Solutions</Link>
             </Button>
           </div>
-          <div className="mt-10 grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-5">
+          <div className="mt-10 grid gap-px bg-border grid-cols-[repeat(auto-fit,minmax(240px,1fr))]">
             {paymentPlatforms.map((p) => (
               <Link href={`/services/${p.slug}`} className="group bg-background p-6" key={p.slug}>
                 <p className="font-display text-xl font-bold">{p.title.replace(" Business", "")}</p>
@@ -195,7 +196,7 @@ export default async function Home() {
         <div className="site-container">
           <p className="eyebrow">Why Corevexal</p>
           <h2 className="section-title mt-5">One Core. Multiple Solutions.</h2>
-          <div className="mt-10 grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-10 grid gap-px bg-border grid-cols-[repeat(auto-fit,minmax(300px,1fr))]">
             {[
               "Structured Guidance",
               "Clear Process",
@@ -228,7 +229,7 @@ export default async function Home() {
               </Link>
             </Button>
           </div>
-          <div className="grid grid-cols-2 gap-px bg-border">
+          <div className="grid gap-px bg-border grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">
             {[
               "Web Development",
               "Next.js",
@@ -251,7 +252,7 @@ export default async function Home() {
         <div className="site-container">
           <p className="eyebrow">How it works</p>
           <h2 className="section-title mt-5">A clear route from need to setup.</h2>
-          <ol className="mt-10 grid gap-px bg-border md:grid-cols-2 lg:grid-cols-3">
+          <ol className="mt-10 grid gap-px bg-border grid-cols-[repeat(auto-fit,minmax(300px,1fr))]">
             {[
               "Tell Us What You Need",
               "Choose Your Service",

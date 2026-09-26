@@ -35,9 +35,8 @@ export default async function AdminPreviewPage({ params }: Props) {
       {/* Preview banner — only admins can reach this page */}
       <div className="sticky top-0 z-50 flex items-center justify-between bg-amber-500/95 px-4 py-2 text-sm font-medium text-amber-950 backdrop-blur-sm">
         <span>
-          🔍 Admin Preview — status:{" "}
-          <span className="font-mono font-bold">{service.status}</span>. This
-          page is not visible to the public
+          🔍 Admin Preview — status: <span className="font-mono font-bold">{service.status}</span>.
+          This page is not visible to the public
           {service.status === "draft" ? " until published." : "."}
         </span>
         <Link

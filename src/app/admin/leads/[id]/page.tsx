@@ -90,7 +90,6 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
               </dl>
             </div>
 
-
             <div className="pt-4 border-t border-border">
               <h3 className="text-xs font-bold uppercase text-muted-foreground">System</h3>
               <dl className="mt-2 space-y-2 text-sm">

@@ -37,8 +37,10 @@ function loadEnvLocal() {
     const key = trimmed.slice(0, eqIdx).trim();
     let value = trimmed.slice(eqIdx + 1).trim();
     // Strip surrounding quotes
-    if ((value.startsWith('"') && value.endsWith('"')) ||
-        (value.startsWith("'") && value.endsWith("'"))) {
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
       value = value.slice(1, -1);
     }
     if (!process.env[key]) process.env[key] = value;
@@ -51,9 +53,7 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-  console.error(
-    "FATAL: NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY must be set.",
-  );
+  console.error("FATAL: NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY must be set.");
   process.exit(1);
 }
 
@@ -75,17 +75,19 @@ function supabaseGet(table, params) {
       },
     };
 
-    https.get(options, (res) => {
-      let body = "";
-      res.on("data", (chunk) => (body += chunk));
-      res.on("end", () => {
-        try {
-          resolve({ status: res.statusCode, data: JSON.parse(body) });
-        } catch (e) {
-          reject(new Error(`JSON parse error: ${e.message}\nBody: ${body}`));
-        }
-      });
-    }).on("error", reject);
+    https
+      .get(options, (res) => {
+        let body = "";
+        res.on("data", (chunk) => (body += chunk));
+        res.on("end", () => {
+          try {
+            resolve({ status: res.statusCode, data: JSON.parse(body) });
+          } catch (e) {
+            reject(new Error(`JSON parse error: ${e.message}\nBody: ${body}`));
+          }
+        });
+      })
+      .on("error", reject);
   });
 }
 
@@ -119,14 +121,14 @@ async function resolveSlug(slug) {
 // Test cases: [slug, expectedOutcome]
 // ---------------------------------------------------------------------------
 const TEST_CASES = [
-  ["business-formation",           "CATEGORY"],
-  ["uk-ltd-formation",             "SERVICE"],
-  ["business-banking",             "CATEGORY"],
-  ["business-banking-setup",       "SERVICE"],
-  ["digital-technology",           "CATEGORY"],
+  ["business-formation", "CATEGORY"],
+  ["uk-ltd-formation", "SERVICE"],
+  ["business-banking", "CATEGORY"],
+  ["business-banking-setup", "SERVICE"],
+  ["digital-technology", "CATEGORY"],
   ["digital-technology-solutions", "SERVICE"],
-  ["consulting",                   "404_NOT_FOUND"],
-  ["not-a-real-slug",              "404_NOT_FOUND"],
+  ["consulting", "404_NOT_FOUND"],
+  ["not-a-real-slug", "404_NOT_FOUND"],
 ];
 
 // ---------------------------------------------------------------------------

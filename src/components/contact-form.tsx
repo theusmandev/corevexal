@@ -5,25 +5,28 @@ import { CheckCircle2, Loader2, Check, ChevronsUpDown } from "lucide-react";
 import { submitContact } from "@/app/actions/contact";
 import { Button } from "./ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "./ui/command";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "./ui/command";
 import { cn } from "@/lib/utils";
 import { COUNTRY_CODES, getCountryName } from "@/lib/countries";
 
-const options = [
-  "UK LTD Formation",
-  "US LLC Formation",
-  "Business Banking",
-  "Wise",
-  "Payoneer",
-  "PayPal",
-  "Stripe",
-  "TapTap",
-  "Digital Services",
-  "Other",
-];
-
-export function ContactForm() {
+export function ContactForm({ serviceOptions = [] }: { serviceOptions?: string[] }) {
   const [state, formAction, isPending] = useActionState(submitContact, { success: false });
+
+  const finalOptions = useMemo(() => {
+    // Deduping just in case, though it shouldn't happen, but mainly just append "Other"
+    const opts = [...serviceOptions];
+    if (!opts.includes("Other")) {
+      opts.push("Other");
+    }
+    return opts;
+  }, [serviceOptions]);
 
   const countryOptions = useMemo(() => {
     return [...COUNTRY_CODES]
@@ -58,7 +61,14 @@ export function ContactForm() {
         </label>
       </div>
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field label="Full Name" name="fullName" required placeholder="e.g. John Smith" autoComplete="name" error={state.fieldErrors?.["fullName"]} />
+        <Field
+          label="Full Name"
+          name="fullName"
+          required
+          placeholder="e.g. John Smith"
+          autoComplete="name"
+          error={state.fieldErrors?.["fullName"]}
+        />
         <Field
           label="Email"
           name="email"
@@ -68,7 +78,14 @@ export function ContactForm() {
           autoComplete="email"
           error={state.fieldErrors?.["email"]}
         />
-        <Field label="Phone" name="phone" type="tel" placeholder="+1 555 000 0000" autoComplete="tel" error={state.fieldErrors?.["phone"]} />
+        <Field
+          label="Phone"
+          name="phone"
+          type="tel"
+          placeholder="+1 555 000 0000"
+          autoComplete="tel"
+          error={state.fieldErrors?.["phone"]}
+        />
         <CountrySelectField
           label="Country"
           name="country"
@@ -79,7 +96,7 @@ export function ContactForm() {
       <SelectField
         label="Service Needed"
         name="serviceRequested"
-        options={options}
+        options={finalOptions}
         error={state.fieldErrors?.["serviceRequested"]}
       />
 
@@ -213,13 +230,14 @@ export function CountrySelectField({
             aria-expanded={open}
             className={`h-12 w-full justify-between border bg-background px-4 font-normal rounded-none shadow-none focus:border-primary hover:bg-background ${error ? "border-destructive" : "border-input"} ${!value ? "text-muted-foreground" : ""}`}
           >
-            {value
-              ? options.find((opt) => opt.code === value)?.name
-              : "Select country..."}
+            {value ? options.find((opt) => opt.code === value)?.name : "Select country..."}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[--radix-popover-trigger-width] p-0 rounded-none shadow-none border-input" align="start">
+        <PopoverContent
+          className="w-[--radix-popover-trigger-width] p-0 rounded-none shadow-none border-input"
+          align="start"
+        >
           <Command>
             <CommandInput placeholder="Search country..." className="border-none focus:ring-0" />
             <CommandList>
@@ -238,7 +256,7 @@ export function CountrySelectField({
                     <Check
                       className={cn(
                         "mr-2 h-4 w-4",
-                        value === opt.code ? "opacity-100" : "opacity-0"
+                        value === opt.code ? "opacity-100" : "opacity-0",
                       )}
                     />
                     {opt.name}

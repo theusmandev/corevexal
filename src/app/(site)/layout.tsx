@@ -9,10 +9,7 @@ export default async function SiteLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [categories, settings] = await Promise.all([
-    getPublishedCategories(),
-    getPublicSettings()
-  ]);
+  const [categories, settings] = await Promise.all([getPublishedCategories(), getPublicSettings()]);
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground relative">

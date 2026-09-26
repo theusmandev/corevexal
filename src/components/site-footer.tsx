@@ -76,8 +76,15 @@ export function SiteFooter({
   settings?: PublicSettings;
   categories?: CategoryWithServices[];
 }) {
-  const hasContact = settings?.contactInfo && (settings.contactInfo.email || settings.contactInfo.phone || settings.contactInfo.address);
-  const hasSocials = settings?.socialLinks && (settings.socialLinks.linkedin || settings.socialLinks.twitter || settings.socialLinks.instagram || settings.socialLinks.facebook);
+  const hasContact =
+    settings?.contactInfo &&
+    (settings.contactInfo.email || settings.contactInfo.phone || settings.contactInfo.address);
+  const hasSocials =
+    settings?.socialLinks &&
+    (settings.socialLinks.linkedin ||
+      settings.socialLinks.twitter ||
+      settings.socialLinks.instagram ||
+      settings.socialLinks.facebook);
 
   return (
     <footer className="bg-deep text-inverse">
@@ -93,12 +100,22 @@ export function SiteFooter({
               <div className="mt-8 space-y-4 text-sm text-inverse-muted">
                 {settings?.contactInfo?.email && (
                   <div>
-                    <a href={`mailto:${settings.contactInfo.email}`} className="hover:text-orange-400 transition-colors">{settings.contactInfo.email}</a>
+                    <a
+                      href={`mailto:${settings.contactInfo.email}`}
+                      className="hover:text-orange-400 transition-colors"
+                    >
+                      {settings.contactInfo.email}
+                    </a>
                   </div>
                 )}
                 {settings?.contactInfo?.phone && (
                   <div>
-                    <a href={`tel:${settings.contactInfo.phone}`} className="hover:text-orange-400 transition-colors">{settings.contactInfo.phone}</a>
+                    <a
+                      href={`tel:${settings.contactInfo.phone}`}
+                      className="hover:text-orange-400 transition-colors"
+                    >
+                      {settings.contactInfo.phone}
+                    </a>
                   </div>
                 )}
                 {settings?.contactInfo?.address && (
@@ -107,25 +124,45 @@ export function SiteFooter({
                 {hasSocials && (
                   <div className="flex items-center gap-4 pt-2">
                     {settings?.socialLinks?.linkedin && (
-                      <a href={settings.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-orange-400 transition-colors">
+                      <a
+                        href={settings.socialLinks.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:text-orange-400 transition-colors"
+                      >
                         <Linkedin className="size-5" />
                         <span className="sr-only">LinkedIn</span>
                       </a>
                     )}
                     {settings?.socialLinks?.twitter && (
-                      <a href={settings.socialLinks.twitter} target="_blank" rel="noopener noreferrer" className="hover:text-orange-400 transition-colors">
+                      <a
+                        href={settings.socialLinks.twitter}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:text-orange-400 transition-colors"
+                      >
                         <Twitter className="size-5" />
                         <span className="sr-only">Twitter</span>
                       </a>
                     )}
                     {settings?.socialLinks?.instagram && (
-                      <a href={settings.socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-orange-400 transition-colors">
+                      <a
+                        href={settings.socialLinks.instagram}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:text-orange-400 transition-colors"
+                      >
                         <Instagram className="size-5" />
                         <span className="sr-only">Instagram</span>
                       </a>
                     )}
                     {settings?.socialLinks?.facebook && (
-                      <a href={settings.socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="hover:text-orange-400 transition-colors">
+                      <a
+                        href={settings.socialLinks.facebook}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:text-orange-400 transition-colors"
+                      >
                         <Facebook className="size-5" />
                         <span className="sr-only">Facebook</span>
                       </a>
@@ -139,7 +176,13 @@ export function SiteFooter({
             </p>
           </div>
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-5">
-            {([staticGroups[0], buildFinancialGroup(categories), ...staticGroups.slice(1)] as Array<{ title: string; links: [string, string][] }>).map((group) => (
+            {(
+              [
+                staticGroups[0],
+                buildFinancialGroup(categories),
+                ...staticGroups.slice(1),
+              ] as Array<{ title: string; links: [string, string][] }>
+            ).map((group) => (
               <div key={group.title}>
                 <h2 className="text-xs font-bold uppercase text-inverse">{group.title}</h2>
                 <ul className="mt-4 space-y-3">

@@ -6,11 +6,11 @@
   "services": [
     {
       "binding": "WORKER_SELF_REFERENCE",
-      "service": "corevexal"
-    }
+      "service": "corevexal",
+    },
   ],
   "assets": {
     "directory": ".open-next/assets",
-    "binding": "ASSETS"
-  }
+    "binding": "ASSETS",
+  },
 }
