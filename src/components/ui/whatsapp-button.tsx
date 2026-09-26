@@ -30,7 +30,7 @@ export function WhatsAppButton({ phone }: { phone?: string }) {
           : "opacity-0 translate-y-2 pointer-events-none",
       )}
     >
-      <span className="hidden min-[400px]:inline-block rounded-md border border-border bg-background px-1.5 py-0.5 text-[10px] font-medium text-foreground shadow-sm">
+      <span className="inline-block rounded-md border border-border bg-background px-1.5 py-0.5 text-[10px] font-medium text-foreground shadow-sm">
         Need help?
       </span>
       <a
