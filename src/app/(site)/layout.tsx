@@ -1,6 +1,7 @@
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { AnnouncementBanner } from "@/components/announcement-banner";
+import { WhatsAppButton } from "@/components/ui/whatsapp-button";
 import { getPublishedCategories } from "@/lib/data/services";
 import { getPublicSettings } from "@/lib/data/settings";
 
@@ -17,6 +18,7 @@ export default async function SiteLayout({
       <SiteHeader categories={categories} />
       <main className="flex-1">{children}</main>
       <SiteFooter settings={settings} categories={categories} />
+      <WhatsAppButton phone={settings.contactInfo.phone} />
     </div>
   );
 }
