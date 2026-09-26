@@ -15,7 +15,7 @@ const leadSchema = z.object({
   email: z.string().trim().email("Invalid email address").max(180, "Email is too long"),
   phone: z.string().trim().max(40, "Phone is too long").optional(),
   country: z.enum(COUNTRY_CODES, { errorMap: () => ({ message: "Invalid country selected" }) }),
-  serviceRequested: z.string().trim().min(2, "Service is required").max(100),
+  serviceRequested: z.string().trim().min(2, "Service is required").max(200),
   message: z
     .string()
     .trim()
