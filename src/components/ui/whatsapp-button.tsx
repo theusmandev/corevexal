@@ -1,6 +1,6 @@
 "use client";
 
-import { FaWhatsapp } from "react-icons/fa";
+import { MessageCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useScrollVisible } from "@/hooks/use-scroll-visible";
 
@@ -39,9 +39,9 @@ export function WhatsAppButton({ phone }: { phone?: string }) {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat with us on WhatsApp"
-        className="inline-flex items-center justify-center size-12 rounded-full shadow-none bg-[#25D366] text-white transition-colors duration-200 hover:bg-[#1DA851] active:scale-95"
+        className="inline-flex items-center justify-center size-12 rounded-full shadow-none bg-[#25D366] text-white transition-colors duration-200 hover:bg-[#1DA851] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       >
-        <FaWhatsapp className="size-6" />
+        <MessageCircle className="size-6" />
       </a>
     </div>
   );
