@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 import { getAllPublishedServiceSlugs, getPublishedCategories } from "@/lib/data/services";
+import { getAllPublishedPostSlugs } from "@/lib/data/blog";
 
 export const revalidate = 60;
 
@@ -30,5 +31,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  return [...routes, ...dynamicRoutes];
+  // Blog posts
+  const postSlugs = await getAllPublishedPostSlugs();
+  const postRoutes = postSlugs.map((slug) => ({
+    url: `${baseUrl}/resources/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.6,
+  }));
+
+  return [...routes, ...dynamicRoutes, ...postRoutes];
 }

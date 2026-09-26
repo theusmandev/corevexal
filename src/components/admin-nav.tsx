@@ -63,6 +63,30 @@ export function AdminNav() {
       >
         Settings
       </Link>
+      <div className="flex gap-4 border-l border-border pl-6">
+        <Link
+          href="/admin/blog-posts"
+          className={
+            pathname.startsWith("/admin/blog-posts")
+              ? "text-foreground font-bold"
+              : "text-muted-foreground hover:text-foreground transition-colors"
+          }
+          aria-current={pathname.startsWith("/admin/blog-posts") ? "page" : undefined}
+        >
+          Blog Posts
+        </Link>
+        <Link
+          href="/admin/blog-categories"
+          className={
+            pathname.startsWith("/admin/blog-categories")
+              ? "text-foreground font-bold"
+              : "text-muted-foreground hover:text-foreground transition-colors"
+          }
+          aria-current={pathname.startsWith("/admin/blog-categories") ? "page" : undefined}
+        >
+          Blog Categories
+        </Link>
+      </div>
     </nav>
   );
 }
