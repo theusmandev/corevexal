@@ -2,6 +2,7 @@
 
 import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import { Markdown } from "tiptap-markdown";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
 import {
@@ -85,6 +86,11 @@ export function BlogEditor({
       Image.configure({
         inline: true,
         allowBase64: false, // No uploads/paste via base64, external URL only
+      }),
+      Markdown.configure({
+        html: false,
+        transformPastedText: true,
+        transformCopiedText: false,
       }),
     ],
     content: value ? JSON.parse(value) : { type: "doc", content: [{ type: "paragraph" }] },

@@ -22,7 +22,7 @@ export function BlogRenderer({ content }: { content: unknown }) {
   const contentArray = (content as Record<string, unknown>)["content"] as JSONNode[];
 
   return (
-    <div className="prose prose-slate max-w-none dark:prose-invert">
+    <div className="prose prose-brand max-w-none">
       {contentArray.map((node: JSONNode, index: number) => (
         <BlogNode key={index} node={node} />
       ))}
@@ -65,6 +65,8 @@ function BlogNode({ node }: { node: JSONNode }) {
         />
       );
     }
+    case "hardBreak":
+      return <br />;
     case "text":
       return <TextNode node={node} />;
     default:
