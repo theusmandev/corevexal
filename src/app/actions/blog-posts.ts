@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/admin";
+import { validateBlogContent } from "@/lib/validate-blog-content";
 
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
@@ -68,9 +69,15 @@ export async function createBlogPost(formData: FormData) {
 
   let contentJson;
   try {
-    contentJson = JSON.parse(data.content);
+    const parsed = JSON.parse(data.content);
+    // Server-side structural validation: walk the TipTap JSON and strip any
+    // node/mark/attribute not in the whitelist before writing to the database.
+    // This runs independently of the client-side sanitizeBlogHtml() step and
+    // cannot be bypassed by callers who POST to this action directly.
+    const { doc } = validateBlogContent(parsed);
+    contentJson = doc;
   } catch (e) {
-    return { error: "Invalid content JSON format." };
+    return { error: e instanceof Error ? e.message : "Invalid content JSON format." };
   }
 
   // Handle published_at logic
@@ -151,9 +158,12 @@ export async function updateBlogPost(id: string, formData: FormData) {
 
   let contentJson;
   try {
-    contentJson = JSON.parse(data.content);
+    const parsed = JSON.parse(data.content);
+    // Server-side structural validation — same as createBlogPost.
+    const { doc } = validateBlogContent(parsed);
+    contentJson = doc;
   } catch (e) {
-    return { error: "Invalid content JSON format." };
+    return { error: e instanceof Error ? e.message : "Invalid content JSON format." };
   }
 
   // Handle published_at logic
