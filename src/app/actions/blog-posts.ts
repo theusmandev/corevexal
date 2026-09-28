@@ -68,14 +68,16 @@ export async function createBlogPost(formData: FormData) {
   }
 
   let contentJson;
+  let contentWasModified = false;
   try {
     const parsed = JSON.parse(data.content);
     // Server-side structural validation: walk the TipTap JSON and strip any
     // node/mark/attribute not in the whitelist before writing to the database.
     // This runs independently of the client-side sanitizeBlogHtml() step and
     // cannot be bypassed by callers who POST to this action directly.
-    const { doc } = validateBlogContent(parsed);
+    const { doc, wasModified } = validateBlogContent(parsed);
     contentJson = doc;
+    contentWasModified = wasModified;
   } catch (e) {
     return { error: e instanceof Error ? e.message : "Invalid content JSON format." };
   }
@@ -113,7 +115,12 @@ export async function createBlogPost(formData: FormData) {
   revalidatePath("/admin/blog-posts");
   revalidatePath("/resources");
   revalidatePath("/sitemap.xml");
-  return { id: inserted.id };
+  return {
+    id: inserted.id,
+    ...(contentWasModified
+      ? { contentWarning: "Some content was removed or modified for security reasons." }
+      : {}),
+  };
 }
 
 export async function updateBlogPost(id: string, formData: FormData) {
@@ -157,11 +164,13 @@ export async function updateBlogPost(id: string, formData: FormData) {
   }
 
   let contentJson;
+  let contentWasModified = false;
   try {
     const parsed = JSON.parse(data.content);
     // Server-side structural validation — same as createBlogPost.
-    const { doc } = validateBlogContent(parsed);
+    const { doc, wasModified } = validateBlogContent(parsed);
     contentJson = doc;
+    contentWasModified = wasModified;
   } catch (e) {
     return { error: e instanceof Error ? e.message : "Invalid content JSON format." };
   }
@@ -204,7 +213,12 @@ export async function updateBlogPost(id: string, formData: FormData) {
   revalidatePath(`/resources/${data.slug}`);
   revalidatePath("/sitemap.xml");
 
-  return { success: true };
+  return {
+    success: true,
+    ...(contentWasModified
+      ? { contentWarning: "Some content was removed or modified for security reasons." }
+      : {}),
+  };
 }
 
 export async function deleteBlogPost(id: string) {

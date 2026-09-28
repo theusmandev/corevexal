@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { isSafeHref, isSafeImageSrc } from "../lib/validate-blog-content";
 
 type JSONNode = {
   type?: string;
@@ -86,7 +87,8 @@ function BlogNode({ node }: { node: JSONNode }) {
       const src = node.attrs?.["src"];
       const alt = node.attrs?.["alt"] || "";
       const title = node.attrs?.["title"];
-      if (!src || typeof src !== "string") return null;
+      // Renderer defence-in-depth: re-check src even if it came from the DB.
+      if (!src || typeof src !== "string" || !isSafeImageSrc(src)) return null;
       return (
         <img
           src={src}
@@ -101,6 +103,13 @@ function BlogNode({ node }: { node: JSONNode }) {
     case "videoEmbed": {
       const src = node.attrs?.["src"];
       if (!src || typeof src !== "string") return null;
+      // Renderer defence-in-depth: only render canonical embed origins.
+      // This guards against any stale DB rows that predate the validator.
+      const isYT =
+        src.startsWith("https://www.youtube-nocookie.com/embed/") ||
+        src.startsWith("https://www.youtube.com/embed/");
+      const isVimeo = src.startsWith("https://player.vimeo.com/video/");
+      if (!isYT && !isVimeo) return null;
       return (
         <div
           style={{
@@ -177,7 +186,9 @@ function TextNode({ node }: { node: JSONNode }) {
         case "link": {
           const href = mark.attrs?.["href"];
           const target = mark.attrs?.["target"];
-          if (typeof href === "string") {
+          // Renderer defence-in-depth: re-validate href even if it came from
+          // the DB, to guard against stale rows written before this fix.
+          if (typeof href === "string" && isSafeHref(href)) {
             if (target === "_blank") {
               elements = (
                 <a href={href} target="_blank" rel="noopener noreferrer">
@@ -190,6 +201,7 @@ function TextNode({ node }: { node: JSONNode }) {
               elements = <a href={href}>{elements}</a>;
             }
           }
+          // If href is missing or unsafe, render plain text — no link.
           break;
         }
 
