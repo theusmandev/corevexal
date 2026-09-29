@@ -20,6 +20,12 @@
  *              listItem, blockquote, horizontalRule, image, videoEmbed, hardBreak
  * Inline marks: bold, italic, underline, strike, link
  * Text-align: only on paragraph + heading; only values "left"/"center"/"right"
+ *
+ * LIMITS
+ * ------
+ * MAX_DEPTH        = 12     — maximum allowed nesting level
+ * MAX_NODE_COUNT   = 2000   — maximum total nodes in the tree
+ * MAX_SIZE_BYTES   = 512000 — maximum serialized JSON size (500 KB)
  */
 
 // ── Types ─────────────────────────────────────────────────────────────────
@@ -50,6 +56,12 @@ export interface ContentValidationResult {
   /** True if any node/mark/attribute was removed. */
   wasModified: boolean;
 }
+
+// ── Structural limits ──────────────────────────────────────────────────────
+
+const MAX_DEPTH = 12;
+const MAX_NODE_COUNT = 2000;
+const MAX_SIZE_BYTES = 512_000; // 500 KB
 
 // ── Allowed node types and their allowed attribute keys ───────────────────
 
@@ -83,19 +95,125 @@ const ALLOWED_MARK_TYPES = new Set(Object.keys(MARK_ATTRS));
 /** Only these values are valid for the textAlign attribute. */
 const ALLOWED_ALIGN_VALUES = new Set(["left", "center", "right"]);
 
+/** Allowed URL schemes for href (link marks). */
+const ALLOWED_HREF_SCHEMES = new Set(["http:", "https:", "mailto:", "tel:"]);
+
+// ── URL scheme validation ─────────────────────────────────────────────────
+
 /**
- * YouTube-nocookie embed origin (what parseVideoUrl() outputs).
- * Vimeo player origin.
- * Only these two origins are accepted in videoEmbed.src on the server.
+ * Validates an href value using the URL API where possible.
+ *
+ * Allowed:
+ *   - http: / https: / mailto: / tel: (URL API normalises scheme to
+ *     lower-case, so mixed-case tricks like "JaVaScRiPt:" are rejected)
+ *   - Relative paths starting with "/" or "#"
+ *
+ * Rejected (including bypass tricks):
+ *   - javascript:, vbscript:, data: — including mixed-case variants
+ *   - URLs with leading whitespace or control characters
+ *     (e.g. " javascript:", "\x00javascript:", "java\tscript:")
+ *     — we strip leading junk first, then rely on URL() to normalise/reject
+ *   - Anything that doesn't parse as a URL and isn't a relative path
  */
-const ALLOWED_VIDEO_ORIGINS = ["https://www.youtube-nocookie.com", "https://player.vimeo.com"];
+export function isSafeHref(val: unknown): boolean {
+  if (typeof val !== "string" || val.length === 0) return false;
 
-// ── Helpers ───────────────────────────────────────────────────────────────
+  // Strip leading whitespace and control characters (U+0000–U+001F, U+007F).
+  // An attacker may prefix with " ", "\t", "\n", "\x00" etc. to bypass naive
+  // startsWith checks. After stripping, re-check.
+  // eslint-disable-next-line no-control-regex
+  const stripped = val.replace(/^[\s\u0000-\u001F\u007F]+/, "");
 
-/** Returns true if the string starts with one of the allowed video origins. */
-function isAllowedVideoSrc(src: unknown): boolean {
-  if (typeof src !== "string" || !src) return false;
-  return ALLOWED_VIDEO_ORIGINS.some((origin) => src.startsWith(origin + "/"));
+  // Relative paths are safe — they have no scheme.
+  if (stripped.startsWith("/") || stripped.startsWith("#")) return true;
+
+  // Attempt full URL parse. The URL constructor normalises the scheme to
+  // lower-case, so "JaVaScRiPt:" becomes "javascript:" and is rejected.
+  try {
+    const parsed = new URL(stripped);
+    return ALLOWED_HREF_SCHEMES.has(parsed.protocol);
+  } catch {
+    // URL() throws for relative URLs and malformed input. Since we already
+    // handled "/" and "#" above, anything else that fails to parse is rejected.
+    return false;
+  }
+}
+
+/**
+ * Validates an image src: only http: or https: are allowed.
+ * Uses the URL API to normalise the scheme — rejects mixed-case tricks and
+ * leading whitespace in the same way as isSafeHref().
+ */
+export function isSafeImageSrc(val: unknown): boolean {
+  if (typeof val !== "string" || val.length === 0) return false;
+  // eslint-disable-next-line no-control-regex
+  const stripped = val.replace(/^[\s\u0000-\u001F\u007F]+/, "");
+  try {
+    const parsed = new URL(stripped);
+    return parsed.protocol === "http:" || parsed.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+// ── Video URL re-parsing ──────────────────────────────────────────────────
+
+/**
+ * Re-parses a stored videoEmbed src server-side using the same logic as the
+ * client-side parseVideoUrl(), but without importing the browser component.
+ *
+ * Extracts the video ID from accepted canonical embed origins:
+ *   https://www.youtube-nocookie.com/embed/<id>
+ *   https://player.vimeo.com/video/<id>
+ *
+ * Rebuilds the canonical embed URL from scratch so we never pass through an
+ * attacker-supplied URL verbatim. Returns null if the src doesn't match.
+ *
+ * NOTE: This mirrors parseVideoUrl() from video-embed-extension.ts but
+ * operates on the *stored embed URL* (not the raw user-input URL), so we
+ * accept only the two canonical origins that parseVideoUrl() itself produces.
+ */
+function reParseVideoEmbedSrc(
+  src: unknown,
+): { embedUrl: string; provider: "youtube" | "vimeo" } | null {
+  if (typeof src !== "string" || src.length === 0) return null;
+
+  let url: URL;
+  try {
+    url = new URL(src);
+  } catch {
+    return null;
+  }
+
+  // Normalised protocol must be https: only.
+  if (url.protocol !== "https:") return null;
+
+  // YouTube nocookie embed: https://www.youtube-nocookie.com/embed/<id>
+  // Also allow standard YouTube embeds: https://www.youtube.com/embed/<id>
+  if (url.hostname === "www.youtube-nocookie.com" || url.hostname === "www.youtube.com") {
+    const m = url.pathname.match(/^\/embed\/([a-zA-Z0-9_-]{11})$/);
+    if (m) {
+      return {
+        embedUrl: `https://${url.hostname}/embed/${m[1]}`,
+        provider: "youtube",
+      };
+    }
+    return null;
+  }
+
+  // Vimeo player embed: https://player.vimeo.com/video/<id>
+  if (url.hostname === "player.vimeo.com") {
+    const m = url.pathname.match(/^\/video\/(\d+)$/);
+    if (m) {
+      return {
+        embedUrl: `https://player.vimeo.com/video/${m[1]}`,
+        provider: "vimeo",
+      };
+    }
+    return null;
+  }
+
+  return null;
 }
 
 /** Strip attrs object to only allowed keys, with value-level checks. */
@@ -128,19 +246,8 @@ function cleanAttrs(nodeType: string, raw: Attrs | undefined): Attrs | undefined
         continue;
       }
     }
-    if (key === "src" && nodeType === "image") {
-      // image src must be http/https
-      if (typeof val !== "string" || (!val.startsWith("http://") && !val.startsWith("https://"))) {
-        _modified = true;
-        continue;
-      }
-    }
-    if (key === "src" && nodeType === "videoEmbed") {
-      if (!isAllowedVideoSrc(val)) {
-        _modified = true;
-        continue;
-      }
-    }
+    // src for image/videoEmbed is handled in their dedicated node branches
+    // in walkNode(); this generic cleanAttrs is not called for those types.
 
     clean[key] = val;
   }
@@ -167,18 +274,10 @@ function cleanMark(mark: TipTapMark): TipTapMark | null {
     const val = mark.attrs[key];
     if (val === undefined || val === null) continue;
 
-    // href must be http/https or internal path — reject javascript:/data:/etc.
+    // href: URL-API-based check that rejects javascript:, data:, vbscript:
+    // and all mixed-case/whitespace bypass tricks.
     if (key === "href") {
-      if (typeof val !== "string") {
-        _modified = true;
-        continue;
-      }
-      if (
-        !val.startsWith("http://") &&
-        !val.startsWith("https://") &&
-        !val.startsWith("/") &&
-        !val.startsWith("#")
-      ) {
+      if (!isSafeHref(val)) {
         _modified = true;
         continue;
       }
@@ -197,6 +296,13 @@ function cleanMark(mark: TipTapMark): TipTapMark | null {
     if (!(key in cleanAttrsObj)) _modified = true;
   }
 
+  // For the link mark: a link with no safe href is useless and potentially
+  // confusing — drop the entire mark rather than leaving {type:"link"}.
+  // The text content is preserved; only the hyperlink is removed.
+  if (mark.type === "link" && !("href" in cleanAttrsObj)) {
+    return null;
+  }
+
   return Object.keys(cleanAttrsObj).length > 0
     ? { type: mark.type, attrs: cleanAttrsObj }
     : { type: mark.type };
@@ -205,9 +311,23 @@ function cleanMark(mark: TipTapMark): TipTapMark | null {
 // ── Core walker ───────────────────────────────────────────────────────────
 
 let _modified = false; // flag set during walk; reset per-call
+let _nodeCount = 0; // running total of nodes visited; reset per-call
 
-function walkNode(node: TipTapNode): TipTapNode | null {
+function walkNode(node: TipTapNode, depth: number): TipTapNode | null {
   if (!node.type) return null;
+
+  // ── depth guard ────────────────────────────────────────────────────────
+  if (depth > MAX_DEPTH) {
+    _modified = true;
+    return null;
+  }
+
+  // ── node count guard ───────────────────────────────────────────────────
+  _nodeCount++;
+  if (_nodeCount > MAX_NODE_COUNT) {
+    _modified = true;
+    return null;
+  }
 
   // ── text nodes ─────────────────────────────────────────────────────────
   if (node.type === "text") {
@@ -236,25 +356,26 @@ function walkNode(node: TipTapNode): TipTapNode | null {
     return null;
   }
 
-  // ── videoEmbed: validate src; drop if invalid ──────────────────────────
+  // ── videoEmbed: re-parse src via reParseVideoEmbedSrc(); drop if invalid ─
   if (node.type === "videoEmbed") {
     const src = node.attrs?.["src"];
-    if (!isAllowedVideoSrc(src)) {
+    const reparsed = reParseVideoEmbedSrc(src);
+    if (!reparsed) {
       _modified = true;
       return null; // drop the entire node
     }
-    const provider = node.attrs?.["provider"];
-    const cleanedProvider = provider === "youtube" || provider === "vimeo" ? provider : "youtube";
+    // Rebuild the node from the re-parsed (clean) values only — never pass
+    // through the raw src or provider from the input.
     return {
       type: "videoEmbed",
-      attrs: { src: src as string, provider: cleanedProvider },
+      attrs: { src: reparsed.embedUrl, provider: reparsed.provider },
     };
   }
 
-  // ── image: validate src; drop if invalid ──────────────────────────────
+  // ── image: validate src with URL-API check; drop if invalid ─────────────
   if (node.type === "image") {
     const src = node.attrs?.["src"];
-    if (typeof src !== "string" || (!src.startsWith("http://") && !src.startsWith("https://"))) {
+    if (!isSafeImageSrc(src)) {
       _modified = true;
       return null;
     }
@@ -277,7 +398,7 @@ function walkNode(node: TipTapNode): TipTapNode | null {
   const cleanedChildren: TipTapNode[] = [];
   if (node.content && Array.isArray(node.content)) {
     for (const child of node.content) {
-      const cleaned = walkNode(child);
+      const cleaned = walkNode(child, depth + 1);
       if (cleaned !== null) cleanedChildren.push(cleaned);
     }
   }
@@ -302,12 +423,27 @@ function walkNode(node: TipTapNode): TipTapNode | null {
  * - Returns a cleaned document and a `wasModified` flag.
  * - If the top-level object is not a `{ type: "doc", content: [...] }`,
  *   throws a structured error (caller should return `{ error: "..." }`).
+ * - Enforces structural limits:
+ *     - MAX_SIZE_BYTES (500 KB) on the serialized JSON
+ *     - MAX_DEPTH (12) nesting levels
+ *     - MAX_NODE_COUNT (2000) total nodes
  *
- * @throws {Error} if the root structure is not a valid TipTap document.
+ * @throws {Error} if the root structure is not a valid TipTap document or
+ *                 if any structural limit is exceeded.
  */
 export function validateBlogContent(raw: unknown): ContentValidationResult {
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
     throw new Error("Content must be a TipTap JSON document object.");
+  }
+
+  // ── Size limit ─────────────────────────────────────────────────────────
+  // Check the serialized size of the raw input before doing any work so that
+  // an attacker cannot force expensive processing by submitting a huge doc.
+  const serialized = JSON.stringify(raw);
+  if (serialized.length > MAX_SIZE_BYTES) {
+    throw new Error(
+      `Content exceeds maximum allowed size of ${MAX_SIZE_BYTES} bytes (got ${serialized.length} bytes).`,
+    );
   }
 
   const obj = raw as Record<string, unknown>;
@@ -321,10 +457,11 @@ export function validateBlogContent(raw: unknown): ContentValidationResult {
   }
 
   _modified = false;
+  _nodeCount = 0;
 
   const cleanedChildren: TipTapNode[] = [];
   for (const child of obj["content"] as TipTapNode[]) {
-    const cleaned = walkNode(child);
+    const cleaned = walkNode(child, 1);
     if (cleaned !== null) cleanedChildren.push(cleaned);
   }
 
