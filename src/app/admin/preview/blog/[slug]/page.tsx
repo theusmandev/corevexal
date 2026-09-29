@@ -38,8 +38,7 @@ export default async function AdminBlogPreviewPage({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const p = post as any;
 
-  const categoryName =
-    p.category && !Array.isArray(p.category) ? p.category.name : "Uncategorized";
+  const categoryName = p.category && !Array.isArray(p.category) ? p.category.name : "Uncategorized";
 
   return (
     <main>
@@ -53,10 +52,7 @@ export default async function AdminBlogPreviewPage({
             <div className="flex items-center gap-4 text-sm font-bold uppercase text-primary mb-6">
               <span>{categoryName}</span>
               <span className="text-muted-foreground/40">•</span>
-              <time
-                className="text-muted-foreground"
-                dateTime={p.published_at || p.created_at}
-              >
+              <time className="text-muted-foreground" dateTime={p.published_at || p.created_at}>
                 {formatDate(p.published_at || p.created_at)}
               </time>
             </div>

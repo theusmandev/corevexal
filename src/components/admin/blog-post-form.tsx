@@ -8,7 +8,9 @@ import dynamic from "next/dynamic";
 
 const BlogEditor = dynamic(() => import("./blog-editor").then((mod) => mod.BlogEditor), {
   ssr: false,
-  loading: () => <div className="min-h-[300px] border border-input bg-background animate-pulse rounded-md" />,
+  loading: () => (
+    <div className="min-h-[300px] border border-input bg-background animate-pulse rounded-md" />
+  ),
 });
 
 function slugify(text: string): string {
@@ -38,7 +40,9 @@ type BlogPostFormProps = {
     published_at: string | null;
   };
   categories: { id: string; name: string }[];
-  action: (formData: FormData) => Promise<{ error?: string; id?: string; success?: boolean }>;
+  action: (
+    formData: FormData,
+  ) => Promise<{ error?: string; id?: string; success?: boolean; contentWarning?: string }>;
 };
 
 export function BlogPostForm({ initialData, categories, action }: BlogPostFormProps) {
@@ -126,6 +130,11 @@ export function BlogPostForm({ initialData, categories, action }: BlogPostFormPr
       if (result.error) {
         setFormError(result.error);
       } else {
+        if (result.contentWarning) {
+          // Warn the admin that some content was stripped server-side.
+          // We still navigate away so the post is saved, but they can edit again.
+          toast.warning(result.contentWarning);
+        }
         toast.success(isEditing ? "Blog post updated" : "Blog post created");
         router.push("/admin/blog-posts");
         router.refresh();
@@ -342,7 +351,6 @@ export function BlogPostForm({ initialData, categories, action }: BlogPostFormPr
 
             {featuredImageUrl && (
               <div className="mt-2 overflow-hidden rounded-md border border-border bg-muted">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={featuredImageUrl}
                   alt="Preview"
