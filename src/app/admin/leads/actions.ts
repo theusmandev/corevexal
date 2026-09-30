@@ -58,3 +58,45 @@ export async function updateLeadStatus(formData: FormData) {
     return { success: false, error: "Could not update this lead" };
   }
 }
+
+export async function deleteLead(id: string) {
+  try {
+    if (typeof id !== "string" || !id.trim()) {
+      return { success: false, error: "Invalid ID" };
+    }
+
+    const supabase = await createClient();
+
+    // Server-side role check
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      return { success: false, error: "Unauthorized" };
+    }
+
+    const { data: hasRole, error: roleError } = await supabase.rpc("has_role", {
+      _user_id: user.id,
+      _role: "admin",
+    });
+
+    if (roleError || !hasRole) {
+      return { success: false, error: "Unauthorized" };
+    }
+
+    const { error } = await supabase.from("leads").delete().eq("id", id);
+
+    if (error) {
+      console.error("Failed to delete lead", error);
+      return { success: false, error: "Could not delete this lead" };
+    }
+
+    revalidatePath("/admin/leads");
+    revalidatePath("/admin");
+
+    return { success: true };
+  } catch (err) {
+    console.error("Action error", err);
+    return { success: false, error: "Could not delete this lead" };
+  }
+}

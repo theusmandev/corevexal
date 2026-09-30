@@ -3,6 +3,7 @@ import { createClient } from "@/integrations/supabase/server";
 import { LEAD_STATUSES, isLeadStatus } from "@/lib/constants";
 import { sanitizeSearchTerm } from "@/lib/search";
 import { formatAdminDate } from "@/lib/format-date";
+import { DeleteLeadButton } from "@/components/admin/delete-lead-button";
 
 export default async function LeadsPage({
   searchParams,
@@ -161,13 +162,14 @@ export default async function LeadsPage({
                   <td className="px-4 py-3 text-muted-foreground">
                     {formatAdminDate(lead.created_at)}
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 flex items-center gap-2">
                     <Link
                       href={`/admin/leads/${lead.id}`}
                       className="text-primary-text hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                     >
                       View
                     </Link>
+                    <DeleteLeadButton id={lead.id} iconOnly />
                   </td>
                 </tr>
               ))

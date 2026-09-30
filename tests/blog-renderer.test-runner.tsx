@@ -11,18 +11,24 @@ describe("BlogRenderer with videoEmbed nodes", () => {
       content: [
         {
           type: "videoEmbed",
-          attrs: { src, provider: "youtube" }
-        }
-      ]
+          attrs: { src, provider: "youtube" },
+        },
+      ],
     };
     return renderToStaticMarkup(React.createElement(BlogRenderer, { content: doc }));
   };
 
   test("Renders YouTube embed with expected sandbox attr", () => {
     const html = renderDocument("https://www.youtube.com/embed/dQw4w9WgXcQ");
-    assert.ok(html.includes('<iframe'), "should contain an iframe");
-    assert.ok(html.includes('src="https://www.youtube.com/embed/dQw4w9WgXcQ"'), "should contain exact src");
-    assert.ok(html.includes('sandbox="allow-scripts allow-same-origin allow-presentation allow-popups"'), "should contain sandbox attribute");
+    assert.ok(html.includes("<iframe"), "should contain an iframe");
+    assert.ok(
+      html.includes('src="https://www.youtube.com/embed/dQw4w9WgXcQ"'),
+      "should contain exact src",
+    );
+    assert.ok(
+      html.includes('sandbox="allow-scripts allow-same-origin allow-presentation allow-popups"'),
+      "should contain sandbox attribute",
+    );
   });
 
   test("Renders YouTube nocookie embed", () => {
@@ -37,6 +43,6 @@ describe("BlogRenderer with videoEmbed nodes", () => {
 
   test("Renders nothing for evil domain", () => {
     const html = renderDocument("https://youtube.com.evil.com/embed/dQw4w9WgXcQ");
-    assert.ok(!html.includes('<iframe'), "should NOT contain an iframe for evil src");
+    assert.ok(!html.includes("<iframe"), "should NOT contain an iframe for evil src");
   });
 });

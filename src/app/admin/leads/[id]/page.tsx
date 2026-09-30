@@ -4,6 +4,7 @@ import { updateLeadStatus } from "../actions";
 import Link from "next/link";
 import { LEAD_STATUSES } from "@/lib/constants";
 import { formatAdminDate } from "@/lib/format-date";
+import { DeleteLeadButton } from "@/components/admin/delete-lead-button";
 
 const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -34,6 +35,7 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
             &larr; Back to Leads
           </Link>
         </div>
+        <DeleteLeadButton id={lead.id} />
       </div>
 
       <div className="overflow-hidden rounded-md border border-border bg-surface">
