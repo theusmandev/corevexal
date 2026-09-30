@@ -122,6 +122,7 @@ export const VideoEmbedExtension = Node.create({
     return {
       src: { default: null },
       provider: { default: "youtube" },
+      width: { default: "100%" },
     };
   },
 
@@ -130,14 +131,20 @@ export const VideoEmbedExtension = Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
-    const { src, provider, ...rest } = HTMLAttributes as VideoEmbedAttributes &
+    const { src, provider, width, ...rest } = HTMLAttributes as VideoEmbedAttributes &
       Record<string, unknown>;
+    
+    // We need to render the width on an outer container or the data-video-embed div.
+    // The previous implementation had a wrapper div with 56.25% padding-bottom.
+    // We can wrap it in another div, or apply width to the same div if it doesn't break aspect ratio.
+    // Actually, padding-bottom on the same div sets height based on its OWN width, which is fine.
     return [
       "div",
       mergeAttributes(rest, {
         "data-video-embed": provider,
+        width: typeof width === "string" ? width : "100%",
         class: "video-embed-wrapper",
-        style: "position:relative;padding-bottom:56.25%;height:0;overflow:hidden;",
+        style: `position:relative;padding-bottom:56.25%;height:0;overflow:hidden;width:${typeof width === "string" ? width : "100%"};margin:0 auto;`,
       }),
       [
         "iframe",

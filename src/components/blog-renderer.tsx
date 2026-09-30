@@ -87,6 +87,7 @@ function BlogNode({ node }: { node: JSONNode }) {
       const src = node.attrs?.["src"];
       const alt = node.attrs?.["alt"] || "";
       const title = node.attrs?.["title"];
+      const width = node.attrs?.["width"] || "100%";
       // Renderer defence-in-depth: re-check src even if it came from the DB.
       if (!src || typeof src !== "string" || !isSafeImageSrc(src)) return null;
       return (
@@ -94,7 +95,8 @@ function BlogNode({ node }: { node: JSONNode }) {
           src={src}
           alt={typeof alt === "string" ? alt : ""}
           title={typeof title === "string" ? title : undefined}
-          className="rounded-md"
+          className="rounded-md mx-auto"
+          style={{ width: typeof width === "string" ? width : "100%" }}
           loading="lazy"
         />
       );
@@ -102,6 +104,7 @@ function BlogNode({ node }: { node: JSONNode }) {
 
     case "videoEmbed": {
       const src = node.attrs?.["src"];
+      const width = node.attrs?.["width"] || "100%";
       if (!src || typeof src !== "string") return null;
       // Renderer defence-in-depth: only render canonical embed origins.
       // This guards against any stale DB rows that predate the validator.
@@ -111,31 +114,33 @@ function BlogNode({ node }: { node: JSONNode }) {
       const isVimeo = src.startsWith("https://player.vimeo.com/video/");
       if (!isYT && !isVimeo) return null;
       return (
-        <div
-          style={{
-            position: "relative",
-            paddingBottom: "56.25%",
-            height: 0,
-            overflow: "hidden",
-            marginBlock: "1.5rem",
-          }}
-        >
-          <iframe
-            src={src}
+        <div style={{ width: typeof width === "string" ? width : "100%", margin: "0 auto" }}>
+          <div
             style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              border: 0,
+              position: "relative",
+              paddingBottom: "56.25%",
+              height: 0,
+              overflow: "hidden",
+              marginBlock: "1.5rem",
             }}
-            allowFullScreen
-            loading="lazy"
-            sandbox="allow-scripts allow-same-origin allow-presentation allow-popups"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            title="Embedded video"
-          />
+          >
+            <iframe
+              src={src}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                border: 0,
+              }}
+              allowFullScreen
+              loading="lazy"
+              sandbox="allow-scripts allow-same-origin allow-presentation allow-popups"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              title="Embedded video"
+            />
+          </div>
         </div>
       );
     }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useTransition } from "react";
+import { useState, useEffect, useTransition, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { checkBlogPostSlugAvailable } from "@/app/actions/blog-posts";
@@ -48,7 +48,10 @@ type BlogPostFormProps = {
 export function BlogPostForm({ initialData, categories, action }: BlogPostFormProps) {
   const isEditing = !!initialData;
   const router = useRouter();
+  const formRef = useRef<HTMLFormElement>(null);
   const [isPending, startTransition] = useTransition();
+  const [isPreviewing, setIsPreviewing] = useState(false);
+  const [isDirty, setIsDirty] = useState(false);
 
   const [title, setTitle] = useState(initialData?.title ?? "");
   const [slug, setSlug] = useState(initialData?.slug ?? "");
@@ -131,10 +134,9 @@ export function BlogPostForm({ initialData, categories, action }: BlogPostFormPr
         setFormError(result.error);
       } else {
         if (result.contentWarning) {
-          // Warn the admin that some content was stripped server-side.
-          // We still navigate away so the post is saved, but they can edit again.
           toast.warning(result.contentWarning);
         }
+        setIsDirty(false);
         toast.success(isEditing ? "Blog post updated" : "Blog post created");
         router.push("/admin/blog-posts");
         router.refresh();
@@ -142,8 +144,41 @@ export function BlogPostForm({ initialData, categories, action }: BlogPostFormPr
     });
   }
 
+  async function handlePreview() {
+    if (!formRef.current) return;
+    if (slugError) return;
+
+    if (!contentJson || contentJson === `{"type":"doc","content":[{"type":"paragraph"}]}`) {
+      setFormError("Content cannot be empty.");
+      return;
+    }
+
+    const fd = new FormData(formRef.current);
+    fd.set("content", contentJson);
+    if (publishedAt) {
+      fd.set("published_at", new Date(publishedAt).toISOString());
+    }
+
+    setFormError(null);
+    setIsPreviewing(true);
+
+    const result = await action(fd);
+
+    setIsPreviewing(false);
+
+    if (result.error) {
+      setFormError(result.error);
+    } else {
+      if (result.contentWarning) {
+        toast.warning(result.contentWarning);
+      }
+      setIsDirty(false);
+      window.open(`/admin/preview/blog/${slug}`, "_blank");
+    }
+  }
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-8 max-w-4xl">
+    <form ref={formRef} onSubmit={handleSubmit} onChange={() => setIsDirty(true)} className="space-y-8 max-w-4xl">
       {formError && (
         <div className="rounded-md border border-destructive bg-destructive/10 p-4 text-sm text-destructive">
           {formError}
@@ -151,15 +186,20 @@ export function BlogPostForm({ initialData, categories, action }: BlogPostFormPr
       )}
 
       {isEditing && (
-        <div className="flex justify-end">
-          <a
-            href={`/admin/preview/blog/${slug}`}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex h-9 items-center justify-center rounded-md border border-input bg-background px-4 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+        <div className="flex justify-end items-center gap-4">
+          {isDirty && (
+            <span className="text-sm text-amber-600 dark:text-amber-400 font-medium">
+              ⚠ You have unsaved changes — saving before previewing...
+            </span>
+          )}
+          <button
+            type="button"
+            onClick={handlePreview}
+            disabled={isPreviewing || isPending}
+            className="inline-flex h-9 items-center justify-center rounded-md border border-input bg-background px-4 text-sm font-medium hover:bg-accent hover:text-accent-foreground disabled:opacity-50"
           >
-            Open Live Preview
-          </a>
+            {isPreviewing ? "Saving..." : "Open Live Preview"}
+          </button>
         </div>
       )}
 
@@ -221,7 +261,10 @@ export function BlogPostForm({ initialData, categories, action }: BlogPostFormPr
             <label className="text-xs font-bold uppercase text-muted-foreground">
               Content <span aria-hidden>*</span>
             </label>
-            <BlogEditor value={contentJson} onChange={setContentJson} />
+            <BlogEditor value={contentJson} onChange={(v) => {
+              setContentJson(v);
+              setIsDirty(true);
+            }} />
           </div>
 
           <div className="grid gap-1.5">

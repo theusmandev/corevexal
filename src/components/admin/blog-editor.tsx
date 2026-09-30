@@ -1,6 +1,7 @@
 "use client";
 
 import { useEditor, EditorContent, Editor } from "@tiptap/react";
+import { BubbleMenu } from "@tiptap/react/menus";
 import StarterKit from "@tiptap/starter-kit";
 import TextAlign from "@tiptap/extension-text-align";
 import { Markdown } from "tiptap-markdown";
@@ -62,6 +63,13 @@ function buildExtensions() {
     Image.configure({
       inline: true,
       allowBase64: false,
+    }).extend({
+      addAttributes() {
+        return {
+          ...this.parent?.(),
+          width: { default: "100%" },
+        };
+      },
     }),
     Markdown.configure({
       html: false,
@@ -140,7 +148,7 @@ export function BlogEditor({
     content: value ? JSON.parse(value) : { type: "doc", content: [{ type: "paragraph" }] },
     editorProps: {
       attributes: {
-        className: "min-h-[300px] p-4 focus:outline-none prose max-w-none dark:prose-invert",
+        className: "min-h-[300px] p-6 focus:outline-none prose max-w-none dark:prose-invert",
       },
     },
     onUpdate: ({ editor }) => {
@@ -659,6 +667,36 @@ export function BlogEditor({
           </div>
         )}
       </div>
+
+      {editor && (
+        <BubbleMenu
+          editor={editor}
+          shouldShow={({ editor }) => editor.isActive("image") || editor.isActive("videoEmbed")}
+        >
+          <div className="flex bg-surface border border-border shadow-md rounded-md overflow-hidden p-1 gap-1">
+            {["25%", "50%", "75%", "100%"].map((w) => (
+              <button
+                key={w}
+                type="button"
+                onClick={() => {
+                  if (editor.isActive("image")) {
+                    editor.chain().focus().updateAttributes("image", { width: w }).run();
+                  } else if (editor.isActive("videoEmbed")) {
+                    editor.chain().focus().updateAttributes("videoEmbed", { width: w }).run();
+                  }
+                }}
+                className={`px-2 py-1 text-xs font-medium rounded ${
+                  editor.getAttributes("image")?.["width"] === w || editor.getAttributes("videoEmbed")?.["width"] === w
+                    ? "bg-primary text-primary-foreground"
+                    : "hover:bg-background text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {w}
+              </button>
+            ))}
+          </div>
+        </BubbleMenu>
+      )}
 
       <EditorContent editor={editor} />
     </div>

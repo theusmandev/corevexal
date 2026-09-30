@@ -51,11 +51,14 @@ const ALLOWED_TAGS = [
   "img",
   // Structural (needed by sanitize-html for inline nesting)
   "br",
+  // Video Embed wrapper
+  "div",
 ];
 
 const ALLOWED_ATTRS: sanitizeHtml.IOptions["allowedAttributes"] = {
   a: ["href", "target", "rel"],
-  img: ["src", "alt"],
+  img: ["src", "alt", "width"],
+  div: ["data-video-embed", "data-provider", "width", "class", "style"],
   // Text-align is stored as a TipTap attribute — when serialised to HTML by
   // TipTap it becomes style="text-align:..." on block elements. We do NOT
   // allow generic style attributes; instead, we strip them and rely on
@@ -94,6 +97,16 @@ const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
           rel: isExternal ? "noopener noreferrer" : "",
         },
       };
+    },
+    div: (tagName, attribs) => {
+      // Only allow div if it's a video-embed
+      if (attribs["data-video-embed"]) {
+        return {
+          tagName,
+          attribs,
+        };
+      }
+      return { tagName, attribs: {} };
     },
   },
 };

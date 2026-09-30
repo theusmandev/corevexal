@@ -75,8 +75,8 @@ const BLOCK_NODE_ATTRS: Record<string, Set<string>> = {
   blockquote: new Set(),
   horizontalRule: new Set(),
   hardBreak: new Set(),
-  image: new Set(["src", "alt", "title"]),
-  videoEmbed: new Set(["src", "provider"]),
+  image: new Set(["src", "alt", "title", "width"]),
+  videoEmbed: new Set(["src", "provider", "width"]),
 };
 
 const ALLOWED_BLOCK_TYPES = new Set(Object.keys(BLOCK_NODE_ATTRS));
@@ -364,11 +364,14 @@ function walkNode(node: TipTapNode, depth: number): TipTapNode | null {
       _modified = true;
       return null; // drop the entire node
     }
+    // Need to handle width!
+    const width = node.attrs?.["width"];
+    const validWidth = typeof width === "string" && ["25%", "50%", "75%", "100%"].includes(width) ? width : "100%";
     // Rebuild the node from the re-parsed (clean) values only — never pass
     // through the raw src or provider from the input.
     return {
       type: "videoEmbed",
-      attrs: { src: reparsed.embedUrl, provider: reparsed.provider },
+      attrs: { src: reparsed.embedUrl, provider: reparsed.provider, width: validWidth },
     };
   }
 
@@ -381,9 +384,11 @@ function walkNode(node: TipTapNode, depth: number): TipTapNode | null {
     }
     const alt = typeof node.attrs?.["alt"] === "string" ? node.attrs["alt"] : "";
     const title = typeof node.attrs?.["title"] === "string" ? node.attrs["title"] : undefined;
+    const width = node.attrs?.["width"];
+    const validWidth = typeof width === "string" && ["25%", "50%", "75%", "100%"].includes(width) ? width : "100%";
     return {
       type: "image",
-      attrs: { src, alt, ...(title !== undefined ? { title } : {}) },
+      attrs: { src, alt, ...(title !== undefined ? { title } : {}), width: validWidth },
     };
   }
 
